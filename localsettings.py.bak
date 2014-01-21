@@ -1,0 +1,5 @@
+basedir = ""
+outdir = ""
+secret_key = ""
+username = ""
+password = ""
