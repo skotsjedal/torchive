@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+   <div class="span12">
+
+      <table class="table table-condensed table-hover">
+         <thead>
+         <tr>
+            <th>Extract</th>
+            <th class="span2">Name</th>
+            <th>Extracted</th>
+            <th class="span2">Archive</th>
+            <th class="span2">Folder</th>
+         </tr>
+         </thead>
+         <tbody>
+         {% for rar in rars %}
+            {% for archive in rar.archives %}
+                {% for file in archive.files %}
+                    <tr>
+                        <td><label class="win-commandicon win-commandring win-command-small icon-export"></label></td>
+                        <td class="span2">{{ file.name }}</td>
+                        <td>{{ file.extracted }}</td>
+                        <td class="span2">{{ archive.name }}</td>
+                        <td class="span2">{{ rar.folder_name }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+         {% endfor %}
+         </tbody>
+      </table>
+
+   </div>
+</div>
+
+
+{% endblock %}
