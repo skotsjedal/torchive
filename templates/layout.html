@@ -1,6 +1,6 @@
 <!doctype html>
 <head>
-    <title>Flaskr</title>
+    <title>Torchive</title>
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='assets/css/bootmetro.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='assets/css/bootmetro-responsive.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='assets/css/bootmetro-icons.css') }}">
@@ -26,8 +26,7 @@
                <span class="win-commandicon win-commandring icon-user"></span>
             </a>
             <div class="pull-left">
-               <h3>FirstName</h3>
-               <h4>LastName</h4>
+               <h3 id="status"></h3>
             </div>
          </div>
 
@@ -38,5 +37,8 @@
    <div class="container">
         {% block body %}{% endblock %}
     </div>
-
+   <script type="text/javascript" src="{{ url_for('static', filename='assets/js/jquery-1.10.0.js') }}"></script>
+   <script type="text/javascript" src="{{ url_for('static', filename='assets/js/bootstrap.js') }}"></script>
+   {#<script type="text/javascript" src="{{ url_for('static', filename='assets/js/bootmetro.js') }}"></script>#}
+    {% block scripts %}{% endblock %}
 </body>

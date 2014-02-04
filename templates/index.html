@@ -18,9 +18,23 @@
             {% for archive in rar.archives %}
                 {% for file in archive.files %}
                     <tr>
-                        <td><label class="win-commandicon win-commandring win-command-small icon-export"></label></td>
-                        <td class="span2">{{ file.name }}</td>
-                        <td>{{ file.extracted }}</td>
+                        <td>
+                            <button class="win-command win-command-small">
+                                <span class="extract win-commandicon win-commandring icon-export" data-target="{{ archive.path }}"></span>
+                            </button>
+                        </td>
+                        <td class="span2">
+                            <a href="/s/{{ file.name }}">
+                                {{ file.name }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if file.extracted %}
+                            <span class="icon-checkmark text-success"></span>
+                            {% else %}
+                                <span class="icon-cross"></span>
+                            {% endif %}
+                        </td>
                         <td class="span2">{{ archive.name }}</td>
                         <td class="span2">{{ rar.folder_name }}</td>
                     </tr>
@@ -34,4 +48,7 @@
 </div>
 
 
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endblock %}
