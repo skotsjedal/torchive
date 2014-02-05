@@ -2,12 +2,13 @@ $('.extract').click(function(){
     var btn = $(this);
     var file = btn.attr('data-target');
     btn.addClass('btn-warning');
+    btn.removeClass('btn-info');
     console.log('calling');
     $.ajax('/x/'+file)
         .done(function(data){
             console.log('success');
             console.log(data);
-            $('#status').text("finished in " + data.time);
+            $('#status').text("finished " + data.files + " in " + data.time);
             btn.removeClass('btn-warning');
             btn.addClass('btn-success');
         })

@@ -9,7 +9,6 @@
             <th>Extract</th>
             <th class="span2">Name</th>
             <th>Size</th>
-            <th>Extracted</th>
             <th class="span2">Archive</th>
             <th class="span2">Folder</th>
          </tr>
@@ -21,7 +20,11 @@
                     <tr>
                         <td>
                             <button class="win-command win-command-small">
-                                <span class="extract win-commandicon win-commandring icon-export" data-target="{{ archive.path }}"></span>
+                                <span class="extract win-commandicon win-commandring icon-export
+                                    {% if file.extracted %}
+                                    btn-info
+                                    {% endif %}
+                                    " data-target="{{ archive.path }}"></span>
                             </button>
                         </td>
                         <td class="span2">
@@ -31,13 +34,6 @@
                         </td>
                         <td>
                             {{ file.size }}
-                        </td>
-                        <td>
-                            {% if file.extracted %}
-                            <span class="icon-checkmark text-success"></span>
-                            {% else %}
-                                <span class="icon-cross"></span>
-                            {% endif %}
                         </td>
                         <td class="span2">{{ archive.name }}</td>
                         <td class="span2">{{ rar.folder_name }}</td>
