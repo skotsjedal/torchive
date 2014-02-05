@@ -8,6 +8,7 @@
          <tr>
             <th>Extract</th>
             <th class="span2">Name</th>
+            <th>Size</th>
             <th>Extracted</th>
             <th class="span2">Archive</th>
             <th class="span2">Folder</th>
@@ -27,6 +28,9 @@
                             <a href="/s/{{ file.name }}">
                                 {{ file.name }}
                             </a>
+                        </td>
+                        <td>
+                            {{ file.size }}
                         </td>
                         <td>
                             {% if file.extracted %}

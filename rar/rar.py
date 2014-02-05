@@ -10,10 +10,11 @@ class Rar:
         self.parse_folder(self.folder)
 
     def parse_folder(self, folder):
-        print "parsing", folder
+        print "folderparse", folder
         for fil in os.listdir(folder):
-            if fil[-3:] == "rar":
-                newarch = Arch(os.path.join(self.folder, fil))
+            fullpath = os.path.join(folder, fil)
+            if fil[-4:] == ".rar":
+                newarch = Arch(fullpath)
                 self.archives.append(newarch)
-            elif os.path.isdir(fil):
-                self.parse_folder(fil)
+            elif os.path.isdir(fullpath):
+                self.parse_folder(fullpath)

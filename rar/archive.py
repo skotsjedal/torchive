@@ -1,6 +1,6 @@
 __author__ = 'Skotsj'
 import rarfile
-from core.core import get_extracted
+from core.core import get_extracted, human_readable
 import localsettings
 
 
@@ -14,18 +14,18 @@ class Arch:
         self.arch = rarfile.RarFile(loc)
         self.path = loc[len(localsettings.basedir):]
         self.name = loc[loc.rindex("/")+1:]
-        print "parsing arch", self.name
+        print "archparse", self.name
         self.files = []
         for f in self.arch.infolist():
-            print "append", f.filename
-            self.files.append(ContainedFile(f.filename))
+            self.files.append(ContainedFile(f))
 
 
 class ContainedFile:
     name = None
     extracted = False
 
-    def __init__(self, name):
-        print "init", name
-        self.name = name
-        self.extracted = name in get_extracted()
+    def __init__(self, f):
+        print "init", f.filename
+        self.name = f.filename
+        self.extracted = self.name in get_extracted()
+        self.size = human_readable(f.file_size)
