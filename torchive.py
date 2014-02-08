@@ -42,7 +42,7 @@ app.config.from_object(__name__)
 
 @app.route('/')
 @requires_auth
-def hello_world():
+def index():
     rars = [Rar(d) for d in get_dirs()]
     return render_template('index.html', rars=rars)
 
@@ -50,14 +50,14 @@ def hello_world():
 @app.route('/x/<entry>/<path:name>')
 @requires_auth
 def extract(entry, name):
-    file = RarFile(localsettings.basedir+name)
+    rfile = RarFile(localsettings.basedir+name)
     start = datetime.datetime.now().replace(microsecond=0)
     status = 'success'
     try:
         extdir = localsettings.outdir
         if entry[-4:] == ".rar":
             extdir = localsettings.basedir+"InnerArchs"
-        file.extract(entry, path=extdir)
+        rfile.extract(entry, path=extdir)
     except:
         status = 'failed'
     time = str(datetime.datetime.now().replace(microsecond=0)-start)
