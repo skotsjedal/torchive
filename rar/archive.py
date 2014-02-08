@@ -1,5 +1,5 @@
 __author__ = 'Skotsj'
-import rarfile
+from rarfile import RarFile, NeedFirstVolume
 from core.core import get_extracted, get_inner_archs, human_readable
 import localsettings
 
@@ -11,11 +11,16 @@ class Arch:
     path = None
 
     def __init__(self, loc):
-        self.arch = rarfile.RarFile(loc)
+        self.files = []
         self.path = loc[len(localsettings.basedir):]
         self.name = loc[loc.rindex("/")+1:]
-        print "archparse", self.name
-        self.files = []
+        try:
+            self.arch = RarFile(loc)
+            print "archparsed", self.name
+        except NeedFirstVolume:
+            print "notfirstvolume, skipping", self.name
+            return
+        
         for f in self.arch.infolist():
             self.files.append(ContainedFile(f))
 
