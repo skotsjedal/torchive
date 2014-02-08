@@ -47,18 +47,21 @@ def hello_world():
     return render_template('index.html', rars=rars)
 
 
-@app.route('/x/<path:name>')
+@app.route('/x/<entry>/<path:name>')
 @requires_auth
-def extract(name):
+def extract(entry, name):
     file = RarFile(localsettings.basedir+name)
     start = datetime.datetime.now().replace(microsecond=0)
     status = 'success'
     try:
-        file.extractall(path=localsettings.outdir)
+        extdir = localsettings.outdir
+        if entry[-4:] == ".rar":
+            extdir = localsettings.basedir+"InnerArchs"
+        file.extract(entry, path=extdir)
     except:
         status = 'failed'
     time = str(datetime.datetime.now().replace(microsecond=0)-start)
-    return jsonify(time=time, files=file.infolist().__len__(), status=status)
+    return jsonify(time=time, files=entry, status=status)
 
 
 @app.route('/s/<path:name>')

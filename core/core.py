@@ -15,6 +15,10 @@ def get_extracted():
     return os.listdir(localsettings.outdir)
 
 
+def get_inner_archs():
+    return os.listdir(localsettings.basedir+"InnerArchs")
+
+
 def human_readable(num):
     for x in ['bytes','KB','MB','GB']:
         if num < 1024.0 and num > -1024.0:
