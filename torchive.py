@@ -1,12 +1,12 @@
 from flask import Flask, render_template, jsonify
 import localsettings
-from core.core import get_dirs
+from core.core import get_dirs, get_all, RARTEMP
 from rar.rar import Rar
 from rarfile import RarFile
 import datetime
 from werkzeug.wrappers import Response
 from functools import wraps
-from flask import request, Response
+from flask import request
 
 
 def check_auth(username, password):
@@ -47,6 +47,13 @@ def index():
     return render_template('index.html', rars=rars)
 
 
+@app.route('/list/')
+@requires_auth
+def list_all():
+    entries = get_all()
+    return render_template('list.html', entries=entries)
+
+
 @app.route('/x/<entry>/<path:name>')
 @requires_auth
 def extract(entry, name):
@@ -56,7 +63,7 @@ def extract(entry, name):
     try:
         extdir = localsettings.outdir
         if entry[-4:] == ".rar":
-            extdir = localsettings.basedir+"InnerArchs"
+            extdir = localsettings.basedir+RARTEMP
         rfile.extract(entry, path=extdir)
     except:
         status = 'failed'
