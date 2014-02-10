@@ -46,3 +46,10 @@ def get_all(depth=0, folder=localsettings.basedir):
             extracted = f in get_extracted()
             entries.append((depth, entry[len(localsettings.basedir):], f, human_readable(os.stat(entry).st_size), extracted))
     return entries
+
+
+def get_all_out():
+    entries = []
+    for f in get_extracted():
+        entries.append((f, human_readable(os.stat(os.path.join(localsettings.outdir, f)).st_size)))
+    return entries

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify
 import localsettings
-from core.core import get_dirs, get_all, RARTEMP
+from core.core import get_dirs, get_all, get_all_out, RARTEMP
 from rar.rar import Rar
 from rarfile import RarFile
 import datetime
@@ -55,6 +55,13 @@ def list_all():
     return render_template('list.html', entries=entries)
 
 
+@app.route('/outlist/')
+@requires_auth
+def list_all_out():
+    entries = get_all_out()
+    return render_template('down.html', entries=entries)
+
+
 @app.route('/x/<entry>/<path:name>')
 @requires_auth
 def extract(entry, name):
@@ -92,6 +99,21 @@ def copy(name):
         status = 'failed'
     time = str(datetime.datetime.now().replace(microsecond=0)-start)
     return jsonify(time=time, file=filename, status=status)
+
+
+@app.route('/m/<path:name>')
+@requires_auth
+def move(name):
+    fullpath = os.path.join(localsettings.outdir, name)
+    target = os.path.join(localsettings.donedir, name)
+    start = datetime.datetime.now().replace(microsecond=0)
+    status = 'success'
+    try:
+        os.rename(fullpath, target)
+    except:
+        status = 'failed'
+    time = str(datetime.datetime.now().replace(microsecond=0)-start)
+    return jsonify(time=time, file=name, status=status)
 
 
 @app.route('/d/<path:name>')

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+   <div class="span12">
+
+      <table class="table table-condensed table-hover">
+         <thead>
+         <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>MoveSeen</th>
+         </tr>
+         </thead>
+         <tbody>
+         {% for name, size in entries %}
+            <tr>
+                <td>
+                    <a href="/s/{{ name }}">{{ name }}</a>
+                </td>
+                <td>
+                    {{ size }}
+                </td>
+                <td >
+                    <button class="win-command win-command-small">
+                        <span class="move win-commandicon win-commandring icon-lamp
+                            btn-info" data-target="{{ name }}"></span>
+                    </button>
+                </td>
+            </tr>
+         {% endfor %}
+         </tbody>
+      </table>
+
+   </div>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

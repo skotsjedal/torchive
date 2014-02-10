@@ -5,7 +5,7 @@ $('.extract').click(function(){
     btn.removeClass('btn-info');
     $.ajax('/x/'+file)
         .done(function(data){
-            $('#status').text("finished " + data.file + " in " + data.time);
+            $('#status').text("extracted " + data.file + " in " + data.time);
             btn.removeClass('btn-warning');
             btn.addClass('btn-success');
         })
@@ -22,9 +22,24 @@ $('.copy').click(function(){
     btn.removeClass('btn-info');
     $.ajax('/c/'+file)
         .done(function(data){
-            $('#status').text("finished " + data.file + " in " + data.time);
+            $('#status').text("copied " + data.file + " in " + data.time);
             btn.removeClass('btn-warning');
             btn.addClass('btn-success');
+        })
+        .fail(function() {
+            btn.removeClass('btn-warning');
+            btn.addClass('btn-danger');
+        });
+});
+
+$('.move').click(function(){
+    var btn = $(this);
+    var file = btn.attr('data-target');
+    btn.addClass('btn-warning');
+    $.ajax('/m/'+file)
+        .done(function(data){
+            $('#status').text("moved " + data.file + " in " + data.time);
+            btn.closest('tr').remove();
         })
         .fail(function() {
             btn.removeClass('btn-warning');
@@ -38,6 +53,7 @@ $('.delete').click(function(){
     console.log('calling');
     $.ajax('/d/'+file)
         .done(function(data){
+            $('#status').text("deleted " + file);
             btn.closest('tr').remove();
         })
         .fail(function() {
