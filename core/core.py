@@ -1,6 +1,8 @@
 import localsettings
 import os
 import re
+from operator import itemgetter
+
 
 RARTEMP = 'InnerArchs'
 RARFILE = re.compile('.*\.r(\d\d|ar)')
@@ -52,4 +54,4 @@ def get_all_out():
     entries = []
     for f in get_extracted():
         entries.append((f, human_readable(os.stat(os.path.join(localsettings.outdir, f)).st_size)))
-    return entries
+    return sorted(entries, key=itemgetter(0))
