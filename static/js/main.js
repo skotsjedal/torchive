@@ -3,22 +3,45 @@ $('.extract').click(function(){
     var file = btn.attr('data-target');
     btn.addClass('btn-warning');
     btn.removeClass('btn-info');
-    console.log('calling');
     $.ajax('/x/'+file)
         .done(function(data){
-            console.log('success');
-            console.log(data);
-            $('#status').text("finished " + data.files + " in " + data.time);
+            $('#status').text("finished " + data.file + " in " + data.time);
             btn.removeClass('btn-warning');
             btn.addClass('btn-success');
         })
-        .fail(function(data) {
-            console.log('error');
-            console.log(data);
+        .fail(function() {
             btn.removeClass('btn-warning');
-            btn.addClass('btn-error');
+            btn.addClass('btn-danger');
+        });
+});
+
+$('.copy').click(function(){
+    var btn = $(this);
+    var file = btn.attr('data-target');
+    btn.addClass('btn-warning');
+    btn.removeClass('btn-info');
+    $.ajax('/c/'+file)
+        .done(function(data){
+            $('#status').text("finished " + data.file + " in " + data.time);
+            btn.removeClass('btn-warning');
+            btn.addClass('btn-success');
         })
-        .always(function(data) {
-            console.log( "complete" );
+        .fail(function() {
+            btn.removeClass('btn-warning');
+            btn.addClass('btn-danger');
+        });
+});
+
+$('.delete').click(function(){
+    var btn = $(this);
+    var file = btn.attr('data-target');
+    console.log('calling');
+    $.ajax('/d/'+file)
+        .done(function(data){
+            btn.closest('tr').remove();
+        })
+        .fail(function() {
+            btn.removeClass('btn-danger');
+            btn.addClass('btn-warning');
         });
 });

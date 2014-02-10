@@ -7,28 +7,32 @@
          <thead>
          <tr>
             <th>Copy</th>
-            <th class="span2">Name</th>
+            <th>Name</th>
             <th>Size</th>
             <th>Delete</th>
          </tr>
          </thead>
          <tbody>
-         {% for depth, entry, name, size in entries %}
+         {% for depth, entry, name, size, copied in entries %}
             <tr>
                 <td>
                     <button class="win-command win-command-small">
-                        <span class="extract win-commandicon win-commandring icon-export
-                            
-                            " data-target="{{ entry }}"></span>
+                        <span class="copy win-commandicon win-commandring icon-copy-3
+                            {% if copied %}btn-info{% endif %}" data-target="{{ entry }}"></span>
                     </button>
                 </td>
-                <td class="span2">
+                <td>
                         {% for i in range(depth) %}-{% endfor %} {{ name }}
                 </td>
                 <td>
                     {{ size }}
                 </td>
-                <td >del</td>
+                <td >
+                    <button class="win-command win-command-small">
+                        <span class="delete win-commandicon win-commandring icon-trash
+                            btn-danger" data-target="{{ entry }}"></span>
+                    </button>
+                </td>
             </tr>
          {% endfor %}
          </tbody>

@@ -7,7 +7,8 @@ import datetime
 from werkzeug.wrappers import Response
 from functools import wraps
 from flask import request
-
+from shutil import copy2
+import os
 
 def check_auth(username, password):
     """This function is called to check if a username /
@@ -68,13 +69,41 @@ def extract(entry, name):
     except:
         status = 'failed'
     time = str(datetime.datetime.now().replace(microsecond=0)-start)
-    return jsonify(time=time, files=entry, status=status)
+    return jsonify(time=time, file=entry, status=status)
 
 
 @app.route('/s/<path:name>')
 @requires_auth
 def stream(name):
     return Response(file(localsettings.outdir + name), direct_passthrough=True)
+
+
+@app.route('/c/<path:name>')
+@requires_auth
+def copy(name):
+    filename = name[name.rindex("/")+1:] if '/' in name else name
+    fullpath = os.path.join(localsettings.basedir, name)
+    target = os.path.join(localsettings.outdir, filename)
+    start = datetime.datetime.now().replace(microsecond=0)
+    status = 'success'
+    try:
+        copy2(fullpath, target)
+    except:
+        status = 'failed'
+    time = str(datetime.datetime.now().replace(microsecond=0)-start)
+    return jsonify(time=time, file=filename, status=status)
+
+
+@app.route('/d/<path:name>')
+@requires_auth
+def delete(name):
+    fullpath = os.path.join(localsettings.basedir, name)
+    status = 'success'
+    try:
+        os.remove(fullpath)
+    except:
+        status = 'failed'
+    return jsonify(status=status)
 
 
 if __name__ == '__main__':

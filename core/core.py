@@ -18,6 +18,10 @@ def get_extracted():
     return os.listdir(localsettings.outdir)
 
 
+def get_downloading():
+    return os.listdir(localsettings.tmpdir)
+
+
 def get_inner_archs():
     return os.listdir(localsettings.basedir+RARTEMP)
 
@@ -39,5 +43,6 @@ def get_all(depth=0, folder=localsettings.basedir):
         if os.path.isdir(entry):
             entries += get_all(depth+1, entry)
         else:
-            entries.append((depth, entry, f, human_readable(os.stat(entry).st_size)))
+            extracted = f in get_extracted()
+            entries.append((depth, entry[len(localsettings.basedir):], f, human_readable(os.stat(entry).st_size), extracted))
     return entries
