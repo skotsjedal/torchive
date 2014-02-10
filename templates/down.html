@@ -6,16 +6,20 @@
       <table class="table table-condensed table-hover">
          <thead>
          <tr>
-            <th>Name</th>
-            <th>Size</th>
-            <th>MoveSeen</th>
+             <th>Name</th>
+             <th>Time</th>
+             <th>Size</th>
+             <th>MoveSeen</th>
          </tr>
          </thead>
          <tbody>
-         {% for name, size in entries %}
+         {% for name, timestamp, size in entries %}
             <tr>
                 <td>
                     <a href="/s/{{ name }}">{{ name }}</a>
+                </td>
+                <td>
+                    {{ timestamp }}
                 </td>
                 <td>
                     {{ size }}

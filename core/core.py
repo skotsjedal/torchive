@@ -2,7 +2,7 @@ import localsettings
 import os
 import re
 from operator import itemgetter
-
+import datetime
 
 RARTEMP = 'InnerArchs'
 RARFILE = re.compile('.*\.r(\d\d|ar)')
@@ -53,5 +53,6 @@ def get_all(depth=0, folder=localsettings.basedir):
 def get_all_out():
     entries = []
     for f in get_extracted():
-        entries.append((f, human_readable(os.stat(os.path.join(localsettings.outdir, f)).st_size)))
+        fullpath = os.path.join(localsettings.outdir, f)
+        entries.append((f, datetime.datetime.fromtimestamp(os.stat(fullpath).st_mtime), human_readable(os.stat(fullpath).st_size)))
     return sorted(entries, key=itemgetter(0))
