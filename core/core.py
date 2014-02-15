@@ -43,6 +43,7 @@ def get_all(depth=0, folder=localsettings.basedir):
         entry = os.path.join(folder, f)
         
         if os.path.isdir(entry):
+            entries.append((depth, entry[len(localsettings.basedir):], f, "Directory", False))
             entries += get_all(depth+1, entry)
         else:
             extracted = f in get_extracted()
@@ -56,3 +57,14 @@ def get_all_out():
         fullpath = os.path.join(localsettings.outdir, f)
         entries.append((f, datetime.datetime.fromtimestamp(os.stat(fullpath).st_mtime), human_readable(os.stat(fullpath).st_size)))
     return sorted(entries, key=itemgetter(0))
+
+
+def clear_rar_dir(folder):
+    print "Attempt delete dir", folder
+    for f in os.listdir(folder):
+        if RARFILE.match(f):
+            os.remove(os.path.join(folder, f))
+            print "deleted", f
+        else:
+            print "not rar, will not delete", f
+    os.rmdir(folder)

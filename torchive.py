@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify
 import localsettings
-from core.core import get_dirs, get_all, get_all_out, RARTEMP
+from core.core import get_dirs, get_all, get_all_out, clear_rar_dir, RARTEMP
 from rar.rar import Rar
 from rarfile import RarFile
 import datetime
@@ -73,8 +73,10 @@ def extract(entry, name):
         if entry[-4:] == ".rar":
             extdir = localsettings.basedir+RARTEMP
         rfile.extract(entry, path=extdir)
+        print name, "extracted"
     except:
         status = 'failed'
+        print name, "failed extract"
     time = str(datetime.datetime.now().replace(microsecond=0)-start)
     return jsonify(time=time, file=entry, status=status)
 
@@ -95,8 +97,10 @@ def copy(name):
     status = 'success'
     try:
         copy2(fullpath, target)
+        print name, "copied"
     except:
         status = 'failed'
+        print name, "failed copy"
     time = str(datetime.datetime.now().replace(microsecond=0)-start)
     return jsonify(time=time, file=filename, status=status)
 
@@ -110,8 +114,10 @@ def move(name):
     status = 'success'
     try:
         os.rename(fullpath, target)
+        print name, "moved"
     except:
         status = 'failed'
+        print name, "move failed"
     time = str(datetime.datetime.now().replace(microsecond=0)-start)
     return jsonify(time=time, file=name, status=status)
 
@@ -122,9 +128,18 @@ def delete(name):
     fullpath = os.path.join(localsettings.basedir, name)
     status = 'success'
     try:
-        os.remove(fullpath)
-    except:
-        status = 'failed'
+        if os.path.isdir(fullpath):
+            clear_rar_dir(fullpath)
+            print name, "deleted dir"
+        else:
+            os.remove(fullpath)
+            print name, "deleted single file"
+    except OSError, e:
+        status = 'failed ' + str(e)
+        response = jsonify(status=status)
+        response.status_code = 400
+        print name, "delete failed"
+        return response
     return jsonify(status=status)
 
 

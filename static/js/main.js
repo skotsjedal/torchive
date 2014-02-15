@@ -56,7 +56,8 @@ $('.delete').click(function(){
             $('#status').text("deleted " + file);
             btn.closest('tr').remove();
         })
-        .fail(function() {
+        .fail(function(data) {
+            $('#status').text("delete failed " + data.staus);
             btn.removeClass('btn-danger');
             btn.addClass('btn-warning');
         });
