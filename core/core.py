@@ -37,13 +37,15 @@ def human_readable(num):
 
 def get_all(depth=0, folder=localsettings.basedir):
     entries = []
+    foldername = folder[folder.rindex('/')+1:]
     for f in os.listdir(folder):
-        if f == RARTEMP or RARFILE.match(f):
+        if not RARTEMP == foldername and RARFILE.match(f):
             continue
         entry = os.path.join(folder, f)
         
         if os.path.isdir(entry):
-            entries.append((depth, entry[len(localsettings.basedir):], f, "Directory", False))
+            if not f == RARTEMP:
+                entries.append((depth, entry[len(localsettings.basedir):], f, "Directory", False))
             entries += get_all(depth+1, entry)
         else:
             extracted = f in get_extracted()
