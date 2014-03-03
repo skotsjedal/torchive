@@ -22,7 +22,10 @@
                     </button>
                 </td>
                 <td>
-                        {% for i in range(depth) %}-{% endfor %} {{ name }}
+                    {% for i in range(depth) %}={% endfor %}{% if depth > 0 %}&gt;
+                    {% else %}<p class="text-info">{% endif %}
+                        {{ name }}
+                    {% if depth == 0 %}</p>{% endif %}
                 </td>
                 <td>
                     {{ size }}
