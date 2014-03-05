@@ -1,6 +1,6 @@
 __author__ = 'Skotsj'
 from rarfile import RarFile, NeedFirstVolume
-from core.core import get_extracted, get_inner_archs, human_readable
+from core.core import get_extracted, get_done, get_inner_archs, human_readable
 import localsettings
 
 
@@ -33,4 +33,5 @@ class ContainedFile:
         print "init", f.filename
         self.name = f.filename
         self.extracted = self.name in get_extracted() or (self.name[-4:] == ".rar" and self.name in get_inner_archs())
+        self.seen = self.name in get_done()
         self.size = human_readable(f.file_size)

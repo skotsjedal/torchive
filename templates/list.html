@@ -13,12 +13,17 @@
          </tr>
          </thead>
          <tbody>
-         {% for depth, entry, name, size, copied in entries %}
+         {% for depth, entry, name, size, copied, seen in entries %}
             <tr>
                 <td>
                     <button class="win-command win-command-small">
                         <span class="copy win-commandicon win-commandring icon-copy-3
-                            {% if copied %}btn-info{% endif %}" data-target="{{ entry }}"></span>
+                            {% if copied %}
+                            btn-info
+                            {% elif seen %}
+                            btn-primary
+                            {% endif %}" 
+                            data-target="{{ entry }}"></span>
                     </button>
                 </td>
                 <td>

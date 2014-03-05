@@ -5,6 +5,13 @@ Tool for managing downloaded archives
 * move to a done directory
 * delete from download directory
 
-Error handling responses and js isn't correct atm
+Error handling responses and respective js isn't entirely correct atm
+
+Legend:
+* Blue - extracted/copied
+* Purple - moved to done folder
+* Green - Command succeeded (copy/extract etc)
+* Orange - Command in progress, waiting for response
+* Red - Command failed
 
 

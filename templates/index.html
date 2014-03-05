@@ -23,6 +23,8 @@
                                 <span class="extract win-commandicon win-commandring icon-export
                                     {% if file.extracted %}
                                     btn-info
+                                    {% elif file.seen %}
+                                    btn-primary
                                     {% endif %}
                                     " data-target="{{ file.name }}/{{ archive.path }}"></span>
                             </button>

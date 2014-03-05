@@ -16,6 +16,9 @@ def get_dirs():
     return dirs
 
 
+def get_done():
+    return os.listdir(localsettings.donedir)
+
 def get_extracted():
     return os.listdir(localsettings.outdir)
 
@@ -45,11 +48,11 @@ def get_all(depth=0, folder=localsettings.basedir):
         
         if os.path.isdir(entry):
             if not f == RARTEMP:
-                entries.append((depth, entry[len(localsettings.basedir):], f, "Directory", False))
+                entries.append((depth, entry[len(localsettings.basedir):], f, "Directory", False, False))
             entries += get_all(depth+1, entry)
         else:
             extracted = f in get_extracted()
-            entries.append((depth, entry[len(localsettings.basedir):], f, human_readable(os.stat(entry).st_size), extracted))
+            entries.append((depth, entry[len(localsettings.basedir):], f, human_readable(os.stat(entry).st_size), extracted, f in get_done()))
     return entries
 
 
