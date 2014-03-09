@@ -1,7 +1,6 @@
 import localsettings
 import os
 import re
-from operator import itemgetter
 import datetime
 
 RARTEMP = 'InnerArchs'
@@ -61,7 +60,7 @@ def get_all_out():
     for f in get_extracted():
         fullpath = os.path.join(localsettings.outdir, f)
         entries.append((f, datetime.datetime.fromtimestamp(os.stat(fullpath).st_mtime), human_readable(os.stat(fullpath).st_size)))
-    return sorted(entries, key=itemgetter(0))
+    return sorted(entries, key=lambda i: i[0].lower())
 
 
 def clear_rar_dir(folder):

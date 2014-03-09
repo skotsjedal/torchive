@@ -32,7 +32,7 @@
             </a>
             
             <div class="pull-left">
-              <h3 id="status"></h3>
+
             </div>
           </div>
 
@@ -40,8 +40,9 @@
       </div>
    </header>
 
-   <div class="container">
+    <div class="container">
         {% block body %}{% endblock %}
+        <h3 id="status"></h3>
     </div>
    <script type="text/javascript" src="{{ url_for('static', filename='thirdparty/js/jquery-1.10.0.js') }}"></script>
    <script type="text/javascript" src="{{ url_for('static', filename='thirdparty/js/bootstrap.js') }}"></script>
