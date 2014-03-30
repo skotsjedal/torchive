@@ -3,7 +3,7 @@ import os
 import re
 import datetime
 
-RARTEMP = 'InnerArchs'
+RARTEMP = u'InnerArchs'
 RARFILE = re.compile('.*\.r(\d\d|ar)')
 
 def get_dirs():
@@ -40,18 +40,20 @@ def human_readable(num):
 def get_all(depth=0, folder=localsettings.basedir):
     entries = []
     foldername = folder[folder.rindex('/')+1:]
+    if isinstance(folder, str):
+        folder = unicode(folder, 'UTF-8')
     for f in os.listdir(folder):
         if not RARTEMP == foldername and RARFILE.match(f):
             continue
         entry = os.path.join(folder, f)
-        
+        itemname = entry[len(localsettings.basedir):]
         if os.path.isdir(entry):
             if not f == RARTEMP:
-                entries.append((depth, entry[len(localsettings.basedir):], f, "Directory", False, False))
+                entries.append((depth, itemname, f, "Directory", False, False))
             entries += get_all(depth+1, entry)
         else:
             extracted = f in get_extracted()
-            entries.append((depth, entry[len(localsettings.basedir):], f, human_readable(os.stat(entry).st_size), extracted, f in get_done()))
+            entries.append((depth, itemname, f, human_readable(os.stat(entry).st_size), extracted, f in get_done()))
     return entries
 
 
