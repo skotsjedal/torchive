@@ -51,10 +51,13 @@ $('.delete').click(function(){
     var btn = $(this);
     var file = btn.attr('data-target');
     console.log('calling');
+    var idx = btn.closest('tr').attr('class');
+    var idxs = idx.split(' ');
+    idx = idxs[idxs.length - 1];
     $.ajax('/d/'+file)
         .done(function(data){
             $('#status').text("deleted " + file);
-            btn.closest('tr').remove();
+            $('.'+idx).remove();
         })
         .fail(function(data) {
             $('#status').text("delete failed " + data.staus);

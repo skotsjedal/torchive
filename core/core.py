@@ -2,9 +2,24 @@ import localsettings
 import os
 import re
 import datetime
+import hashlib
 
 RARTEMP = u'InnerArchs'
 RARFILE = re.compile('.*\.r(\d\d|ar)')
+
+
+def hashfolder(string):
+    digests = []
+    folders = string.split('/')
+    partial = ''
+    for f in folders:
+        partial += '/'+f
+        h = hashlib.sha1(partial)
+        hexd = h.hexdigest()[0:12]
+        digests.append(hexd)
+    fullhex = ' '.join(digests)
+    print string, fullhex
+    return fullhex
 
 def get_dirs():
     rootentries = [os.path.join(localsettings.basedir, f) for f in os.listdir(localsettings.basedir)]
@@ -39,21 +54,22 @@ def human_readable(num):
 
 def get_all(depth=0, folder=localsettings.basedir):
     entries = []
-    foldername = folder[folder.rindex('/')+1:]
     if isinstance(folder, str):
         folder = unicode(folder, 'UTF-8')
     for f in os.listdir(folder):
+        foldername = folder[folder.rindex('/')+1:]
         if not RARTEMP == foldername and RARFILE.match(f):
             continue
         entry = os.path.join(folder, f)
         itemname = entry[len(localsettings.basedir):]
+        idx = hashfolder(itemname)
         if os.path.isdir(entry):
             if not f == RARTEMP:
-                entries.append((depth, itemname, f, "Directory", False, False))
+                entries.append((depth, itemname, f, "Directory", False, False, idx))
             entries += get_all(depth+1, entry)
         else:
             extracted = f in get_extracted()
-            entries.append((depth, itemname, f, human_readable(os.stat(entry).st_size), extracted, f in get_done()))
+            entries.append((depth, itemname, f, human_readable(os.stat(entry).st_size), extracted, f in get_done(), idx))
     return entries
 
 

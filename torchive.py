@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from flask import Flask, render_template, jsonify
 import localsettings
 from core.core import get_dirs, get_all, get_all_out, clear_rar_dir, RARTEMP
@@ -7,7 +8,7 @@ import datetime
 from werkzeug.wrappers import Response
 from functools import wraps
 from flask import request
-from shutil import copy2
+from shutil import copy2, rmtree
 import os
 
 def check_auth(username, password):
@@ -129,7 +130,8 @@ def delete(name):
     status = 'success'
     try:
         if os.path.isdir(fullpath):
-            clear_rar_dir(fullpath)
+            #clear_rar_dir(fullpath)
+            rmtree(fullpath)
             print name, "deleted dir"
         else:
             os.remove(fullpath)

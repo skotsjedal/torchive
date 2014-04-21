@@ -13,8 +13,8 @@
          </tr>
          </thead>
          <tbody>
-         {% for depth, entry, name, size, copied, seen in entries %}
-            <tr>
+         {% for depth, entry, name, size, copied, seen, fidx in entries %}
+            <tr class="{{fidx}}">
                 <td>
                     <button class="win-command win-command-small">
                         <span class="copy win-commandicon win-commandring icon-copy-3
