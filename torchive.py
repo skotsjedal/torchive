@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from flask import Flask, render_template, jsonify
 import localsettings
-from core.core import get_dirs, get_all, get_all_out, clear_rar_dir, RARTEMP
+from core.core import get_dirs, get_all, get_all_out, RARTEMP
 from rar.rar import Rar
 from rarfile import RarFile
 import datetime
@@ -11,18 +11,21 @@ from flask import request
 from shutil import copy2, rmtree
 import os
 
+
 def check_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
     """
     return username == localsettings.username and password == localsettings.password
 
+
 def authenticate():
     """Sends a 401 response that enables basic auth"""
     return Response(
-    'Could not verify your access level for that URL.\n'
-    'You have to login with proper credentials', 401,
-    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        'Could not verify your access level for that URL.\n'
+        'You have to login with proper credentials', 401,
+        {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
 
 def requires_auth(f):
     @wraps(f)
@@ -31,7 +34,9 @@ def requires_auth(f):
         if not auth or not check_auth(auth.username, auth.password):
             return authenticate()
         return f(*args, **kwargs)
+
     return decorated
+
 
 DEBUG = True
 SECRET_KEY = localsettings.secret_key
@@ -66,19 +71,22 @@ def list_all_out():
 @app.route('/x/<entry>/<path:name>')
 @requires_auth
 def extract(entry, name):
-    rfile = RarFile(localsettings.basedir+name)
+    rfile = RarFile(localsettings.basedir + name)
     start = datetime.datetime.now().replace(microsecond=0)
     status = 'success'
     try:
         extdir = localsettings.outdir
         if entry[-4:] == ".rar":
-            extdir = localsettings.basedir+RARTEMP
+            extdir = localsettings.basedir + RARTEMP
         rfile.extract(entry, path=extdir)
         print name, "extracted"
     except:
         status = 'failed'
         print name, "failed extract"
-    time = str(datetime.datetime.now().replace(microsecond=0)-start)
+        response = jsonify(status=status)
+        response.status_code = 400
+        return response
+    time = str(datetime.datetime.now().replace(microsecond=0) - start)
     return jsonify(time=time, file=entry, status=status)
 
 
@@ -91,7 +99,7 @@ def stream(name):
 @app.route('/c/<path:name>')
 @requires_auth
 def copy(name):
-    filename = name[name.rindex("/")+1:] if '/' in name else name
+    filename = name[name.rindex("/") + 1:] if '/' in name else name
     fullpath = os.path.join(localsettings.basedir, name)
     target = os.path.join(localsettings.outdir, filename)
     start = datetime.datetime.now().replace(microsecond=0)
@@ -102,7 +110,10 @@ def copy(name):
     except:
         status = 'failed'
         print name, "failed copy"
-    time = str(datetime.datetime.now().replace(microsecond=0)-start)
+        response = jsonify(status=status)
+        response.status_code = 400
+        return response
+    time = str(datetime.datetime.now().replace(microsecond=0) - start)
     return jsonify(time=time, file=filename, status=status)
 
 
@@ -118,8 +129,11 @@ def move(name):
         print name, "moved"
     except:
         status = 'failed'
+        response = jsonify(status)
+        response.status_code = 400
         print name, "move failed"
-    time = str(datetime.datetime.now().replace(microsecond=0)-start)
+        return response
+    time = str(datetime.datetime.now().replace(microsecond=0) - start)
     return jsonify(time=time, file=name, status=status)
 
 
@@ -130,7 +144,6 @@ def delete(name):
     status = 'success'
     try:
         if os.path.isdir(fullpath):
-            #clear_rar_dir(fullpath)
             rmtree(fullpath)
             print name, "deleted dir"
         else:
