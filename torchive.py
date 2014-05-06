@@ -1,7 +1,9 @@
 #!/usr/bin/python
+from enzyme import MalformedMKVError
 from flask import Flask, render_template, jsonify
 import localsettings
 from core.core import get_dirs, get_all, get_all_out, RARTEMP
+from mkvinfo.mkvinfo import Mkvinfo
 from rar.rar import Rar
 from rarfile import RarFile
 import datetime
@@ -73,7 +75,6 @@ def list_all_out():
 def extract(entry, name):
     rfile = RarFile(localsettings.basedir + name)
     start = datetime.datetime.now().replace(microsecond=0)
-    status = 'success'
     try:
         extdir = localsettings.outdir
         if entry[-4:] == ".rar":
@@ -87,7 +88,7 @@ def extract(entry, name):
         response.status_code = 400
         return response
     time = str(datetime.datetime.now().replace(microsecond=0) - start)
-    return jsonify(time=time, file=entry, status=status)
+    return jsonify(time=time, file=entry, status='success')
 
 
 @app.route('/s/<path:name>')
@@ -103,18 +104,17 @@ def copy(name):
     fullpath = os.path.join(localsettings.basedir, name)
     target = os.path.join(localsettings.outdir, filename)
     start = datetime.datetime.now().replace(microsecond=0)
-    status = 'success'
     try:
         copy2(fullpath, target)
         print name, "copied"
-    except:
+    except Exception, e:
         status = 'failed'
         print name, "failed copy"
-        response = jsonify(status=status)
+        response = jsonify(status=status, error=str(e))
         response.status_code = 400
         return response
     time = str(datetime.datetime.now().replace(microsecond=0) - start)
-    return jsonify(time=time, file=filename, status=status)
+    return jsonify(time=time, file=filename, status='success')
 
 
 @app.route('/m/<path:name>')
@@ -123,25 +123,23 @@ def move(name):
     fullpath = os.path.join(localsettings.outdir, name)
     target = os.path.join(localsettings.donedir, name)
     start = datetime.datetime.now().replace(microsecond=0)
-    status = 'success'
     try:
         os.rename(fullpath, target)
         print name, "moved"
-    except:
+    except Exception, e:
         status = 'failed'
-        response = jsonify(status)
+        response = jsonify(status, error=str(e))
         response.status_code = 400
         print name, "move failed"
         return response
     time = str(datetime.datetime.now().replace(microsecond=0) - start)
-    return jsonify(time=time, file=name, status=status)
+    return jsonify(time=time, file=name, status='success')
 
 
 @app.route('/d/<path:name>')
 @requires_auth
 def delete(name):
     fullpath = os.path.join(localsettings.basedir, name)
-    status = 'success'
     try:
         if os.path.isdir(fullpath):
             rmtree(fullpath)
@@ -150,12 +148,25 @@ def delete(name):
             os.remove(fullpath)
             print name, "deleted single file"
     except OSError, e:
-        status = 'failed ' + str(e)
-        response = jsonify(status=status)
+        status = 'failed'
+        response = jsonify(status=status, error=str(e))
         response.status_code = 400
         print name, "delete failed"
         return response
-    return jsonify(status=status)
+    return jsonify(status='success')
+
+
+@app.route('/i/<path:name>')
+@requires_auth
+def get_track_info(name):
+    fullpath = os.path.join(localsettings.outdir, name)
+    try:
+        mkvinfo = Mkvinfo(fullpath)
+    except MalformedMKVError, e:
+        response = jsonify(status='failed', error=str(e))
+        response.status_code = 400
+        return response
+    return jsonify(status='success', info=mkvinfo.all_json)
 
 
 if __name__ == '__main__':
