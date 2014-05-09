@@ -1,43 +1,44 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class="row">
-   <div class="span12">
+    <div id="fileInfo" style="position:absolute; z-index:1; margin-left: 148px"></div>
+    <div class="row" id="down">
 
-      <table class="table table-condensed table-hover">
-         <thead>
-         <tr>
-             <th>Name</th>
-             <th>Time</th>
-             <th>Size</th>
-             <th>MoveSeen</th>
-         </tr>
-         </thead>
-         <tbody>
-         {% for name, timestamp, size in entries %}
-            <tr>
-                <td>
-                    <a href="/s/{{ name }}">{{ name }}</a>
-                </td>
-                <td>
-                    {{ timestamp }}
-                </td>
-                <td>
-                    {{ size }}
-                </td>
-                <td >
-                    <button class="win-command win-command-small">
+
+        <div class="span10" style="position: relative; margin-left: 230px; z-index: 2; background-color: #ffffff;">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Time</th>
+                    <th>Size</th>
+                    <th>MoveSeen</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for name, timestamp, size in entries %}
+                    <tr>
+                        <td>
+                            <a href="/s/{{ name }}">{{ name }}</a>
+                        </td>
+                        <td>
+                            {{ timestamp }}
+                        </td>
+                        <td>
+                            {{ size }}
+                        </td>
+                        <td>
+                            <button class="win-command win-command-small">
                         <span class="move win-commandicon win-commandring icon-lamp
                             btn-info" data-target="{{ name }}"></span>
-                    </button>
-                </td>
-            </tr>
-         {% endfor %}
-         </tbody>
-      </table>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-   </div>
-</div>
-
+        </div>
+    </div>
 
 {% endblock %}
 {% block scripts %}

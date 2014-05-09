@@ -65,3 +65,49 @@ $('.delete').click(function(){
             btn.addClass('btn-warning');
         });
 });
+
+$('#down tr').click(function () {
+    var element = $(this).find('.move');
+    var file = element.attr('data-target');
+    $('#fileInfo').load('/ih/' + encodeURIComponent(file), function (response, status, xhr) {
+        if (status == 'error') {
+            $('#fileInfoContainer').html('Not an mkv file');
+            return;
+        }
+        $('#fileInfo').find('td.track').click(function () {
+            var track = $(this);
+            var trackId = track.attr('data-target');
+            var trackType = track.attr('data-type');
+            console.log(trackId, trackType);
+        });
+    });
+});
+
+$('#fileInfo').find('td.track').click(function () {
+    console.log($(this));
+});
+
+$('#fileInfo').hover(function () {
+    $(this).css('zIndex', 3).css('marginLeft','0px');
+}, function () {
+    $(this).css('zIndex', 1).css('marginLeft','148px');
+});
+
+$(function() {
+    var $sidebar, $window, offset, delta, topPadding, $navbar;
+    $sidebar = $("#fileInfo");
+    $window = $(window);
+    offset = $sidebar.offset();
+    $navbar = $('#nav-bar');
+    console.log($("#footer").offset());
+    delta = $("#footer").offset().top - $navbar.offset().top - $navbar.outerHeight() - $sidebar.outerHeight();
+    topPadding = 50;
+
+    $window.scroll(function() {
+        console.log(delta);
+        $sidebar.stop().animate({
+            marginTop: Math.max(Math.min($window.scrollTop() - offset.top + topPadding, delta), 0)
+        });
+    });
+
+});

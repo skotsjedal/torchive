@@ -22,6 +22,18 @@ class Mkvinfo:
         return [SubTrack(track) for track in self.mkv.subtitle_tracks]
 
     @property
+    def all(self):
+        return {
+            'title': self.title,
+            'duration': self.duration.total_seconds(),
+            'tracks': {
+                'video': [track.json() for track in self.video_tracks],
+                'audio': [track.json() for track in self.audio_tracks],
+                'sub': [track.json() for track in self.sub_tracks]
+            }
+        }
+
+    @property
     def all_json(self):
         return {
             'title': self.title,

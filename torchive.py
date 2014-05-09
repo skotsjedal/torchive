@@ -168,6 +168,19 @@ def get_track_info(name):
         return response
     return jsonify(status='success', info=mkvinfo.all_json)
 
+@app.route('/ih/<path:name>')
+@requires_auth
+def get_track_info_html(name):
+    print name
+    fullpath = os.path.join(localsettings.outdir, name)
+    try:
+        mkvinfo = Mkvinfo(fullpath)
+    except MalformedMKVError, e:
+        response = jsonify(status='failed', error=str(e))
+        response.status_code = 400
+        return response
+    return render_template('_partial/fileInfo.html', mkvinfo=mkvinfo.all)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
