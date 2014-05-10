@@ -71,14 +71,16 @@ $('#down tr').click(function () {
     var file = element.attr('data-target');
     $('#fileInfo').load('/ih/' + encodeURIComponent(file), function (response, status, xhr) {
         if (status == 'error') {
-            $('#fileInfoContainer').html('Not an mkv file');
+            $('#fileInfo').html('Not an mkv file').css('zIndex', 3).css('marginLeft', 0);
             return;
         }
+        $('#fileInfo').css('zIndex', 1).css('marginLeft', '148px');
         $('#fileInfo').find('td.track').click(function () {
             var track = $(this);
             var trackId = track.attr('data-target');
             var trackType = track.attr('data-type');
             console.log(trackId, trackType);
+            // TODO use trackinfo
         });
     });
 });
