@@ -70,6 +70,7 @@ def get_all(depth=0, folder=localsettings.basedir):
         else:
             extracted = f in get_extracted()
             entries.append((depth, itemname, f, human_readable(os.stat(entry).st_size), extracted, f in get_done(), idx))
+    entries = sorted(entries, key=lambda i: i[1].lower())
     return entries
 
 
