@@ -8,7 +8,7 @@
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Name ({{ entries|length  }}) </th>
                     <th>Time</th>
                     <th>Size</th>
                     <th>MoveSeen</th>
@@ -18,7 +18,7 @@
                 {% for name, timestamp, size in entries %}
                     <tr>
                         <td>
-                            <a href="/s/{{ name }}">{{ name }}</a>
+                            {{ loop.index }}. <a href="/s/{{ name }}">{{ name }}</a>
                         </td>
                         <td>
                             {{ timestamp }}
