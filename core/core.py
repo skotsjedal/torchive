@@ -13,7 +13,7 @@ def hashfolder(string):
     folders = string.split('/')
     partial = ''
     for f in folders:
-        partial += '/'+f
+        partial += '/'+f.encode('utf-8')
         h = hashlib.sha1(partial)
         hexd = h.hexdigest()[0:12]
         digests.append(hexd)
