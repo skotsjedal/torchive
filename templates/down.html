@@ -15,10 +15,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for name, timestamp, size in entries %}
+                {% for name, timestamp, size, code in entries %}
                     <tr>
                         <td>
-                            {{ loop.index }}. <a href="/s/{{ name }}">{{ name }}</a>
+                            {{ loop.index }}. <a href="/hs/{{ code }}/{{ name }}">{{ name }}</a>
                         </td>
                         <td>
                             {{ timestamp }}

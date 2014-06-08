@@ -11,7 +11,7 @@ from werkzeug.wrappers import Response
 from functools import wraps
 from flask import request
 from shutil import copy2, rmtree
-import os
+import os, hashlib
 
 
 def check_auth(username, password):
@@ -94,6 +94,19 @@ def extract(entry, name):
 @app.route('/s/<path:name>')
 @requires_auth
 def stream(name):
+    return Response(file(localsettings.outdir + name), direct_passthrough=True)
+
+@app.route('/hs/<hashcode>/<path:name>')
+def hash_stream(hashcode, name):
+    fsize = os.stat(localsettings.outdir + name).st_size
+    hashbase = name + str(fsize)
+    hashcode_i = hashlib.sha1(hashbase).hexdigest()[0:12]
+    print hashcode, hashcode_i
+    if (hashcode != hashcode_i):
+        response = jsonify(status='error', error='wrong hash')
+        response.status_code = 401
+        return response
+
     return Response(file(localsettings.outdir + name), direct_passthrough=True)
 
 
