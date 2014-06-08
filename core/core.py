@@ -21,6 +21,13 @@ def hashfolder(string):
     print string, fullhex
     return fullhex
 
+
+def get_file_hash(name):
+    fsize = os.stat(localsettings.outdir + name).st_size
+    hashbase = name + str(fsize) + localsettings.hashsalt
+    return hashlib.sha1(hashbase).hexdigest()[0:12]
+
+
 def get_dirs():
     rootentries = [os.path.join(localsettings.basedir, f) for f in os.listdir(localsettings.basedir)]
     dirs = []
@@ -78,9 +85,7 @@ def get_all_out():
     entries = []
     for f in get_extracted():
         fullpath = os.path.join(localsettings.outdir, f)
-        fsize = os.stat(localsettings.outdir + f).st_size
-        hashbase = f + str(fsize)
-        hashcode = hashlib.sha1(hashbase).hexdigest()[0:12]
+        hashcode = get_file_hash(f)
         entries.append((f, datetime.datetime.fromtimestamp(os.stat(fullpath).st_mtime), human_readable(os.stat(fullpath).st_size), hashcode))
     return sorted(entries, key=lambda i: i[0].lower())
 

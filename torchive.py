@@ -2,7 +2,7 @@
 from enzyme import MalformedMKVError
 from flask import Flask, render_template, jsonify
 import localsettings
-from core.core import get_dirs, get_all, get_all_out, RARTEMP
+from core.core import get_dirs, get_all, get_all_out, get_file_hash, RARTEMP
 from mkvinfo.mkvinfo import Mkvinfo
 from rar.rar import Rar
 from rarfile import RarFile
@@ -11,7 +11,7 @@ from werkzeug.wrappers import Response
 from functools import wraps
 from flask import request
 from shutil import copy2, rmtree
-import os, hashlib
+import os
 
 
 def check_auth(username, password):
@@ -40,7 +40,7 @@ def requires_auth(f):
     return decorated
 
 
-DEBUG = True
+DEBUG = False
 SECRET_KEY = localsettings.secret_key
 USERNAME = localsettings.username
 PASSWORD = localsettings.password
@@ -98,9 +98,7 @@ def stream(name):
 
 @app.route('/hs/<hashcode>/<path:name>')
 def hash_stream(hashcode, name):
-    fsize = os.stat(localsettings.outdir + name).st_size
-    hashbase = name + str(fsize)
-    hashcode_i = hashlib.sha1(hashbase).hexdigest()[0:12]
+    hashcode_i = get_file_hash(name)
     print hashcode, hashcode_i
     if (hashcode != hashcode_i):
         response = jsonify(status='error', error='wrong hash')
