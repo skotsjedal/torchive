@@ -116,8 +116,15 @@ def copy(name):
     target = os.path.join(localsettings.outdir, filename)
     start = datetime.datetime.now().replace(microsecond=0)
     try:
-        copy2(fullpath, target)
-        print name, "copied"
+        if os.path.isdir(fullpath):
+            for ff in os.listdir(fullpath):
+                fullpath_f = os.path.join(fullpath, ff)
+                target_f = os.path.join(localsettings.outdir, ff)
+                copy2(fullpath_f, target_f)
+                print ff, "copied"
+        else:
+            copy2(fullpath, target)
+            print name, "copied"
     except Exception, e:
         status = 'failed'
         print name, "failed copy"

@@ -18,13 +18,17 @@ $('.extract').click(function(){
 $('.copy').click(function(){
     var btn = $(this);
     var file = btn.attr('data-target');
-    btn.addClass('btn-warning');
-    btn.removeClass('btn-info');
+    var idx = btn.closest('tr').attr('class');
+    var idxs = idx.split(' ');
+    idx = idxs[idxs.length - 1];
+    var btns = $('.'+ idx + " .copy");
+    btns.addClass('btn-warning');
+    btns.removeClass('btn-info');
     $.ajax('/c/'+file)
         .done(function(data){
             $('#status').text("copied " + data.file + " in " + data.time);
-            btn.removeClass('btn-warning');
-            btn.addClass('btn-success');
+            btns.removeClass('btn-warning');
+            btns.addClass('btn-success');
         })
         .fail(function() {
             btn.removeClass('btn-warning');
