@@ -3,6 +3,7 @@ from enzyme import MalformedMKVError
 from flask import Flask, render_template, jsonify
 import localsettings
 from core.core import get_dirs, get_all, get_all_out, get_file_hash, RARTEMP
+from mediainfo.parser import parse
 from mkvinfo.mkvinfo import Mkvinfo
 from rar.rar import Rar
 from rarfile import RarFile
@@ -40,7 +41,7 @@ def requires_auth(f):
     return decorated
 
 
-DEBUG = False
+DEBUG = True
 SECRET_KEY = localsettings.secret_key
 USERNAME = localsettings.username
 PASSWORD = localsettings.password
@@ -178,13 +179,19 @@ def delete(name):
 @requires_auth
 def get_track_info(name):
     fullpath = os.path.join(localsettings.outdir, name)
+    status = 'success'
     try:
         mkvinfo = Mkvinfo(fullpath)
     except MalformedMKVError, e:
-        response = jsonify(status='failed', error=str(e))
-        response.status_code = 400
-        return response
-    return jsonify(status='success', info=mkvinfo.all_json)
+        status = 'error'
+        mkvinfo = e
+    try:
+        info = parse(name).__dict__
+    except:
+        info = None
+
+    return jsonify(status=status, info=mkvinfo.all_json, filenameinfo=info)
+
 
 @app.route('/ih/<path:name>')
 @requires_auth

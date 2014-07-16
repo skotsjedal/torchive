@@ -9,6 +9,7 @@ def test_standard():
     assert mediainfo.title == 'derp'
     assert mediainfo is not None
 
+
 def test_x_sd():
     mediainfo = parse('Oslo.1x4.dvdrip.xvid-naturlig.avi')
     assert mediainfo.title == 'Oslo'
