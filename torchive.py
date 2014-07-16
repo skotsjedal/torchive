@@ -101,7 +101,7 @@ def stream(name):
 def hash_stream(hashcode, name):
     hashcode_i = get_file_hash(name)
     print hashcode, hashcode_i
-    if (hashcode != hashcode_i):
+    if hashcode != hashcode_i:
         response = jsonify(status='error', error='wrong hash')
         response.status_code = 401
         return response

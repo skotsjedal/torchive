@@ -81,7 +81,7 @@ Filetype:
 
 Text:
   Skotsj:
-    Expression: -?(.+)\.
+    Expression: -?\.?(.+)\.
     Description: >
       text
     Matches: asd | er2134 | pew | hei.hei
