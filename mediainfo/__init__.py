@@ -4,11 +4,11 @@ __author__ = 'Skotsj'
 class MediaInfo:
     def __init__(self):
         self.mtype = None
-        self.filename = None
         self.grp = None
         self.title = None
         self.season = None
         self.ep = None
+        self.info = None
         self.quality = None
         self.source = None
         self.year = None

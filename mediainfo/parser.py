@@ -20,13 +20,11 @@ parser = reparse.parser(
 
 
 def parse(filename):
-    m = parser(filename)
+    filename = filename.replace('_', ' ').replace(' ', '.')
     try:
-      m = m[0][0]
-      return m
+        p = parser(filename)
+        m = p[0][0]
+        m.title = m.title.replace('.', ' ')
+        return m
     except:
-      print filename
-      print m
-      raise Exception
-    m.title = m.title.replace('.', ' ')
-    return m
+        raise Exception('Cannot parse %s' % filename)
