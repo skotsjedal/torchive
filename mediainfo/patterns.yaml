@@ -1,0 +1,14 @@
+TV:
+  Order: 1 
+  Pattern:  |
+    <Title> \. <Episode> \. <Quality> <Source> \. <Codec> - <Group> \. <Filetype>
+
+Movie:
+  Order: 2
+  Pattern: |
+    <Title> \. <Year> \. <Quality> <Source> \. <Codec> - <Group> \. <Filetype>
+
+Anime:
+  Order: 3
+  Pattern: |
+    \[<Group>\] \s <Title> \s <Episode> \s .+? \. <Filetype>
