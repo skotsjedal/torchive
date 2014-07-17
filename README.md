@@ -1,5 +1,3 @@
-edit and move localsettings.py.bak to localsettings.py
-
 Tool for managing downloaded archives
 * extract/copy to ready directory
 * move to a done directory
@@ -14,4 +12,13 @@ Legend:
 * Orange - Command in progress, waiting for response
 * Red - Command failed
 
+Install:
+copy localsettings.py.bak to localsettings.py and edit
 
+Dependencies:
+* flask
+* enzyme
+* rarfile
+* reparse
+* python-yaml
+* pytest
