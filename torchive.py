@@ -1,44 +1,19 @@
 #!/usr/bin/python
-from enzyme import MalformedMKVError
-from flask import Flask, render_template, jsonify
-import localsettings
-from core.core import get_dirs, get_all, get_all_out, get_file_hash, RARTEMP
-from mediainfo.parser import parse
-from mkvinfo.mkvinfo import Mkvinfo
-from rar.rar import Rar
-from rarfile import RarFile
 import datetime
-from werkzeug.wrappers import Response
-from functools import wraps
-from flask import request
 from shutil import copy2, rmtree
 import os
 
+from enzyme import MalformedMKVError
+from flask import Flask, render_template, jsonify
+from rarfile import RarFile
+from werkzeug.wrappers import Response
 
-def check_auth(username, password):
-    """This function is called to check if a username /
-    password combination is valid.
-    """
-    return username == localsettings.username and password == localsettings.password
-
-
-def authenticate():
-    """Sends a 401 response that enables basic auth"""
-    return Response(
-        'Could not verify your access level for that URL.\n'
-        'You have to login with proper credentials', 401,
-        {'WWW-Authenticate': 'Basic realm="Login Required"'})
-
-
-def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        auth = request.authorization
-        if not auth or not check_auth(auth.username, auth.password):
-            return authenticate()
-        return f(*args, **kwargs)
-
-    return decorated
+from auth import requires_auth
+from core.core import get_dirs, get_all, get_all_out, get_file_hash, RARTEMP
+import localsettings
+from mediainfo.parser import parse
+from mkvinfo.mkvinfo import Mkvinfo
+from rar.rar import Rar
 
 
 DEBUG = True
@@ -96,6 +71,7 @@ def extract(entry, name):
 @requires_auth
 def stream(name):
     return Response(file(localsettings.outdir + name), direct_passthrough=True)
+
 
 @app.route('/hs/<hashcode>/<path:name>')
 def hash_stream(hashcode, name):

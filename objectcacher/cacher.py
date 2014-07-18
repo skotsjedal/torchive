@@ -1,7 +1,7 @@
 import pickle
 import os
 from datetime import datetime
-from objectcacher import cachefolder, Persisted, expire_threshold
+from objectcacher import CACHEFOLDER, Persisted, EXPIRE_THRESHOLD
 
 
 def persist(obj):
@@ -9,23 +9,23 @@ def persist(obj):
 
     Persist an object to cache
 
-    :param obj: object to persist, object must have unique field ``id``
+    :param obj: object to persisted, object must have unique field ``id``
     """
-    p = Persisted()
-    p.id = obj.id
-    p.type = obj.__class__.__name__
-    p.obj = obj
-    filename = get_filename(p.type, p.id)
+    persisted = Persisted()
+    persisted.id = obj.id
+    persisted.type = obj.__class__.__name__
+    persisted.obj = obj
+    filename = get_filename(persisted.type, persisted.id)
     print 'saving object as %s' % filename
-    with open(filename, 'wb') as f:
-        pickle.dump(p, f)
+    with open(filename, 'wb') as persist_file:
+        pickle.dump(persisted, persist_file)
 
 
 def get_filename(objtype, idx):
     """
     internal helper method
     """
-    filename = os.path.join(cachefolder, '%s_%d' % (objtype, idx))
+    filename = os.path.join(CACHEFOLDER, '%s_%d' % (objtype, idx))
     return filename
 
 
@@ -43,8 +43,8 @@ def try_get(objtype, idx):
         print 'couldn\'t find file %s' % filename
         return None
     print 'loading object %s' % filename
-    with open(filename, 'rb') as f:
-        persisted = pickle.load(f)
-        if (datetime.now() - persisted.time).seconds > expire_threshold:
+    with open(filename, 'rb') as persist_file:
+        persisted = pickle.load(persist_file)
+        if (datetime.now() - persisted.time).seconds > EXPIRE_THRESHOLD:
             persisted.expired = True
         return persisted

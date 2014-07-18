@@ -1,20 +1,13 @@
 from functions import functions
 import reparse
+from mediainfo import PATH
 
 __author__ = 'Skotsj'
 
-path = ""
-if '__file__' in globals():
-    import os
-
-    path = str(os.path.dirname(__file__))
-    if path:
-        path += "/"
-
 parser = reparse.parser(
     parser_type=reparse.alt_parser,
-    expressions_yaml_path=path + 'expressions.yaml',
-    patterns_yaml_path=path + 'patterns.yaml',
+    expressions_yaml_path=PATH + 'expressions.yaml',
+    patterns_yaml_path=PATH + 'patterns.yaml',
     functions=functions
 )
 

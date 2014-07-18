@@ -1,5 +1,13 @@
 __author__ = 'Skotsj'
 
+PATH = ""
+if '__file__' in globals():
+    import os
+
+    PATH = str(os.path.dirname(__file__))
+    if PATH:
+        PATH += "/"
+
 
 class MediaInfo:
     def __init__(self):

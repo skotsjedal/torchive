@@ -1,17 +1,17 @@
 from datetime import datetime
 import os
 
-path = ''
+PATH = ''
 if '__file__' in globals():
-    path = str(os.path.dirname(__file__))
-    if path:
-        path += '/'
+    PATH = str(os.path.dirname(__file__))
+    if PATH:
+        PATH += '/'
 
-cachefolder = path + 'cache'
-expire_threshold = 2 * 3600  # hours to seconds
+CACHEFOLDER = PATH + 'cache'
+EXPIRE_THRESHOLD = 2 * 3600  # hours to seconds
 
-if not os.path.exists(cachefolder):
-    os.mkdir(cachefolder)
+if not os.path.exists(CACHEFOLDER):
+    os.mkdir(CACHEFOLDER)
 
 
 class Persisted:
