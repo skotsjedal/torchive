@@ -22,7 +22,10 @@ def testsave():
 
 
 def testload():
-    info_loaded = try_get(MediaInfo.__name__, info.id)
+    p = try_get(MediaInfo.__name__, info.id)
+    assert p is not None
+    assert p.expired == False
+    info_loaded = p.obj
     assert info_loaded is not None
     assert info_loaded.id == info.id
     assert info_loaded.title == info.title
