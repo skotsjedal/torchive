@@ -1,4 +1,4 @@
-from mediainfo.parser import parse
+from torchive.mediainfo.parser import parse
 
 import os
 from torchive import localsettings
