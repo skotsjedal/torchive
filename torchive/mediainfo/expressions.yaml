@@ -1,0 +1,89 @@
+Title:
+  Skotsj:
+    Expression: (?:(\w+)-)?([\w\.]+\w)
+    Description: >
+      Title with optional group
+    Matches: regr-The Little Bear | The Little Bear
+    Groups:
+      - Group
+      - Title
+
+Episode:
+  Skotsj:
+    Expression: (?:s?(\d+)[ex])?(\d{1,3})
+    Description: >
+      Simple episode
+    Matches: s01e01 | 1x1
+    Non-Matches: Episode 1
+    Groups:
+      - Season
+      - Episode
+
+Year:
+  Skotsj:
+    Expression: (\d{4})
+    Description: >
+      Year
+    Matches: 1997 | 2014
+    Non-Matches: 97
+    Groups:
+      - Year
+
+Quality:
+  Skotsj:
+    Expression: (\d+[pi])\.
+    Description: >
+      quality
+    Matches: 720p | 1080i
+    Non-Matches: 5112 | .hei | yo.yo
+    Groups:
+      - Quality
+
+Source:
+  Skotsj:
+    Expression: (\w+TV|bluray|\w+Rip|\w+-dl)
+    Description: >
+      text
+    Matches: hdtv | bluray | dvdrip
+    Non-Matches: hei.hei
+    Groups:
+      - Text
+
+Codec:
+  Skotsj:
+    Expression: ([\w\.]+)
+    Description: >
+      text
+    Matches: X264 | divx | xvid
+    Non-Matches: hei.hei | 720p
+    Groups:
+      - Text
+
+Group:
+  Skotsj:
+    Expression: (\w+)
+    Description: >
+      text
+    Matches: asd | er2134 | pew
+    Non-Matches: hei.hei
+    Groups:
+      - Text
+
+Filetype:
+  Skotsj:
+    Expression: (\w+)
+    Description: >
+      filetype
+    Matches: mkv | avi | divx
+    Non-Matches: .abc
+    Groups:
+      - Type
+
+Text:
+  Skotsj:
+    Expression: -?\.?(.+)\.
+    Description: >
+      text
+    Matches: asd | er2134 | pew | hei.hei
+    Groups:
+      - Text

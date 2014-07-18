@@ -1,0 +1,10 @@
+BASEDIR = u""       # Incoming files location
+OUTDIR = u""        # Extract/copy location
+TMPDIR = u""        # Incomplete incoming files location (not yet in use)
+DONEDIR = u""       # Done/seen location
+
+USERNAME = u""
+PASSWORD = u""
+
+SECRET_KEY = u""
+HASHSALT = ""

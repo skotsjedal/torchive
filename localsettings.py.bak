@@ -1,8 +1,0 @@
-basedir = u""
-outdir = u""
-secret_key = u""
-username = u""
-password = u""
-hashsalt = ""
-tmpdir = u""
-donedir = u""

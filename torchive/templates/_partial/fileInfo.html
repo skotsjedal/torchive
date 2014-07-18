@@ -1,0 +1,28 @@
+<table class="table table-condensed table-cell-hover" style="cursor:pointer;">
+    <tbody>
+    {% for tracktype in mkvinfo.tracks %}
+        {% with tracks = mkvinfo.tracks[tracktype] %}
+            <tr>
+                <td rowspan="{{ tracks|length + 1 }}" style="vertical-align:top;">
+                    <span class="label label-info">{{ tracktype|capitalize }}</span>
+                </td>
+                <td></td>
+            </tr>
+            {% for track in tracks %}
+                <tr>
+                    <td class="track" data-target="{{ track['track_number'] }}" data-type="{{ tracktype }}"
+                            {% if track['default'] %}
+                        style="background-color: lightskyblue; border-radius: 8px"
+                            {% endif %}>
+                        <ul>
+                            {% for key in track %}
+                                <li>{{ key|capitalize }}<span class="icon-arrow-right"></span>{{ track[key] }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endwith %}
+    {% endfor %}
+    </tbody>
+</table>
