@@ -7,12 +7,12 @@ from flask import Flask, render_template, jsonify
 from rarfile import RarFile
 from werkzeug.wrappers import Response
 
-from auth import requires_auth
-from core.core import get_dirs, get_all, get_all_out, get_file_hash, RARTEMP
-from mediainfo.parser import parse
-from mkvinfo.mkvinfo import Mkvinfo
-from rar.rar import Rar
 from torchive import localsettings
+from torchive.auth import requires_auth
+from torchive.core.core import get_dirs, get_all, get_all_out, RARTEMP, get_file_hash
+from torchive.mediainfo.parser import parse
+from torchive.mkvinfo.mkvinfo import Mkvinfo
+from torchive.rar.rar import Rar
 
 
 DEBUG = True

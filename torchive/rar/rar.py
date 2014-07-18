@@ -1,5 +1,5 @@
 import os
-from archive import Arch
+from torchive.rar.archive import Arch
 
 
 class Rar:

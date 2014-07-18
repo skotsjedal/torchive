@@ -1,11 +1,11 @@
 import torchive.localsettings
 from os import remove, path, rmdir, listdir, stat
-from re import compile
+import re
 from datetime import datetime
 from hashlib import sha1
 
 RARTEMP = u'InnerArchs'
-RARFILE = compile('.*\.r(\d\d|ar)')
+RARFILE = re.compile(r'.*\.r(\d\d|ar)')
 
 
 def hashfolder(string):
@@ -13,7 +13,7 @@ def hashfolder(string):
     folders = string.split('/')
     partial = ''
     for f in folders:
-        partial += '/'+f.encode('utf-8')
+        partial += '/' + f.encode('utf-8')
         h = sha1(partial)
         hexd = h.hexdigest()[0:12]
         digests.append(hexd)
@@ -40,6 +40,7 @@ def get_dirs():
 def get_done():
     return listdir(torchive.localsettings.DONEDIR)
 
+
 def get_extracted():
     return listdir(torchive.localsettings.OUTDIR)
 
@@ -49,22 +50,23 @@ def get_downloading():
 
 
 def get_inner_archs():
-    return listdir(torchive.localsettings.BASEDIR+RARTEMP)
+    return listdir(torchive.localsettings.BASEDIR + RARTEMP)
 
 
 def human_readable(num):
-    for x in ['bytes','KB','MB','GB']:
-        if num < 1024.0 and num > -1024.0:
+    for x in ['bytes', 'KB', 'MB', 'GB']:
+        if 1024.0 > num > -1024.0:
             return "%3.1f%s" % (num, x)
         num /= 1024.0
     return "%3.1f%s" % (num, 'TB')
+
 
 def get_all(depth=0, folder=torchive.localsettings.BASEDIR):
     entries = []
     if isinstance(folder, str):
         folder = unicode(folder, 'UTF-8')
     for f in listdir(folder):
-        foldername = folder[folder.rindex('/')+1:]
+        foldername = folder[folder.rindex('/') + 1:]
         if not RARTEMP == foldername and RARFILE.match(f):
             continue
         entry = path.join(folder, f)
@@ -73,7 +75,7 @@ def get_all(depth=0, folder=torchive.localsettings.BASEDIR):
         if path.isdir(entry):
             if not f == RARTEMP:
                 entries.append((depth, itemname, f, "Directory", False, False, idx))
-            entries += get_all(depth+1, entry)
+            entries += get_all(depth + 1, entry)
         else:
             extracted = f in get_extracted()
             entries.append((depth, itemname, f, human_readable(stat(entry).st_size), extracted, f in get_done(), idx))
@@ -86,7 +88,8 @@ def get_all_out():
     for f in get_extracted():
         fullpath = path.join(torchive.localsettings.OUTDIR, f)
         hashcode = get_file_hash(f)
-        entries.append((f, datetime.fromtimestamp(stat(fullpath).st_mtime), human_readable(stat(fullpath).st_size), hashcode))
+        entries.append(
+            (f, datetime.fromtimestamp(stat(fullpath).st_mtime), human_readable(stat(fullpath).st_size), hashcode))
     return sorted(entries, key=lambda i: i[0].lower())
 
 

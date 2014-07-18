@@ -1,6 +1,6 @@
-from functions import functions
 import reparse
 from torchive.mediainfo import PATH
+from torchive.mediainfo.functions import functions
 
 __author__ = 'Skotsj'
 

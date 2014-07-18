@@ -19,12 +19,10 @@ def testcleanup():
 
 
 def testsave():
-    global info
     persist(info)
 
 
 def testload():
-    global info
     persisted = try_get(MediaInfo.__name__, info.id)
     assert persisted is not None
     assert not persisted.expired

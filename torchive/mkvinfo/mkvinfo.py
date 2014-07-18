@@ -1,5 +1,5 @@
 from enzyme import MKV
-from models import VideoTrack, AudioTrack, SubTrack
+from torchive.mkvinfo.models import SubTrack, VideoTrack, AudioTrack
 
 
 class Mkvinfo:

@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import request
 from werkzeug.wrappers import Response
-import localsettings
+from torchive import localsettings
 
 __author__ = 'Skotsj'
 
