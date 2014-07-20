@@ -222,7 +222,7 @@ def get_mediainfo(name):
         return response
 
     print imdbinfo
-    return render_template('_partial/mediaInfo.html', imdbinfo=imdbinfo)
+    return render_template('_partial/mediaInfo.html', minfo=minfo, imdbinfo=imdbinfo)
 
 
 @app.route('/imdbimg/<image>')
@@ -236,3 +236,15 @@ def get_image(image):
     response.status_code = 404
     return response
 
+@app.route('/imdburl/<path:name>')
+@requires_auth
+def get_imdb_url(name):
+    try:
+        minfo = parse(name)
+        imdbinfo = mediainfo.find(minfo)
+    except Exception, e:
+        response = jsonify(status='failed', error=str(e))
+        response.status_code = 500
+        return response
+
+    return jsonify(url='http://www.imdb.com/title/' + imdbinfo.imdbid)

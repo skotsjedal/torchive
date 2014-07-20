@@ -42,8 +42,9 @@
 
     <div class="container">
         {% block body %}{% endblock %}
-        <div id="footer">
+        <div id="footer" style="padding-bottom: 30px; text-align: center">
             <h3 id="status"></h3>
+            <h6>Torchive on <a href="https://github.com/skotsjedal/torchive">GitHub</a> </h6>
         </div>
     </div>
    <script type="text/javascript" src="{{ url_for('static', filename='thirdparty/js/jquery-1.10.0.js') }}"></script>

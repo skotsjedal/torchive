@@ -2,9 +2,12 @@
     <tr>
         <td>
             Title: {{ imdbinfo.title }} <br/>
+            {% if minfo.mtype == 'TV' %}
+                Season: {{ minfo.season }}/{{ imdbinfo.get_seasoncount() }} <br/>
+                Episode: {{ minfo.ep }}/{{ imdbinfo.seasons[minfo.season] }} <br/>
+            {% endif %}
             Year: {{ imdbinfo.year }} <br/>
             Rating: {{ imdbinfo.rating }} <br/>
-            Seasons: {{ imdbinfo.get_seasoncount() }} <br/>
         </td>
         <td>
             <img src="/imdbimg/{{ imdbinfo.image }}"/>
