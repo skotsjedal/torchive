@@ -25,8 +25,8 @@ def get_filename(objtype, idx):
     """
     internal helper method
     """
-    idx = str(idx).replace(' ', '.')
-    filename = os.path.join(CACHEFOLDER, '%s_%s' % (objtype, idx))
+    idx = str(idx).replace(' ', '.').lower()
+    filename = os.path.join(CACHEFOLDER, '%s_%s.pkl' % (objtype, idx))
     return filename
 
 
