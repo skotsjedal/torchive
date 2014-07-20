@@ -31,6 +31,9 @@ def find(mediainfo):
     imdbinfo_persist = cacher.try_get(ImdbInfo.__name__, lookup_id)
     if imdbinfo_persist is None or imdbinfo_persist.expired:
         imdbinfo = search_imdb(mediainfo.title, with_episodes=mediainfo.mtype == MediaInfo.TV)
+        if imdbinfo is None:
+            imdbinfo = ImdbInfo()
+            imdbinfo.title = 'Not found'
         imdbinfo.id = mediainfo.title
         cacher.persist(imdbinfo)
     else:
@@ -62,7 +65,7 @@ def search_imdb(movie, with_episodes=False):
     resp = requests.get(OMDBAPI_ENDP, params=dict(t=movie))
     respdict = json.loads(resp.text)
     del resp
-    if not respdict['Response']:
+    if respdict['Response'] == u'False':
         return None
     info = ImdbInfo()
     info.title = respdict['Title']

@@ -128,7 +128,8 @@ $('.mediainfo').hover(function(event){
     }).show();
     $mediainfo.load('/mi/' + encodeURIComponent(file), function (response, status, xhr) {
         if (status == 'error') {
-            $('#mediainfo').html('error:<br/>' + response.error);
+            respo = eval('(' + response + ')');
+            $('#mediainfo').html('error:<br/>' + respo.error);
         }
     });
     },function(){

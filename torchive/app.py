@@ -2,10 +2,12 @@ from datetime import datetime
 import os
 from shutil import copy2, rmtree
 from os import remove, rename, path, listdir
+import traceback
 
 from enzyme import MalformedMKVError
 from flask import Flask, render_template, jsonify, send_file, request
 from rarfile import RarFile
+import sys
 from werkzeug.wrappers import Response
 
 from torchive import localsettings
@@ -211,6 +213,10 @@ def get_mediainfo(name):
         minfo = parse(name)
         imdbinfo = mediainfo.find(minfo)
     except Exception, e:
+        print "Exception:"
+        print '-'*60
+        traceback.print_exc(file=sys.stdout)
+        print '-'*60
         response = jsonify(status='failed', error=str(e))
         response.status_code = 500
         return response
