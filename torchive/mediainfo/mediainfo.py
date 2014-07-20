@@ -23,6 +23,10 @@ def find(mediainfo):
     :return: ImdbInfo object
     """
 
+    if mediainfo.mtype == MediaInfo.ANIME:
+        # TODO implement something
+        return None
+
     lookup_id = mediainfo.title
     imdbinfo_persist = cacher.try_get(ImdbInfo.__name__, lookup_id)
     if imdbinfo_persist is None or imdbinfo_persist.expired:

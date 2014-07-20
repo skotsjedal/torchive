@@ -4,7 +4,7 @@ from shutil import copy2, rmtree
 from os import remove, rename, path, listdir
 
 from enzyme import MalformedMKVError
-from flask import Flask, render_template, jsonify, send_file
+from flask import Flask, render_template, jsonify, send_file, request
 from rarfile import RarFile
 from werkzeug.wrappers import Response
 
@@ -45,7 +45,44 @@ def list_all():
 @requires_auth
 def list_all_out():
     entries = get_all_out()
-    return render_template('down.html', entries=entries)
+    # TODO try out more VLC protocol
+    return render_template('down.html', entries=entries, host=request.host, protocol='http')
+
+
+def stream(name):
+    filename = os.path.join(localsettings.OUTDIR, name)
+
+    def stream_movie():
+        with open(filename, "rb") as f:
+            byte_s = f.read(512)
+            while byte_s:
+                yield byte_s
+                byte_s = f.read(512)
+
+    t = os.stat(filename)
+
+    sz = str(t.st_size)
+    return Response(stream_movie(), mimetype='video/x-matroska',
+                    headers={"Content-Type": "video/x-matroska", "Content-Disposition": "inline",
+                             "Content-Transfer-Enconding": "binary", "Content-Length": sz})
+
+
+@app.route('/s/<path:name>')
+@requires_auth
+def protected_stream(name):
+    return stream(name)
+
+
+@app.route('/hs/<hashcode>/<path:name>')
+def hash_stream(hashcode, name):
+    hashcode_i = get_file_hash(name)
+    print hashcode, hashcode_i
+    if hashcode != hashcode_i:
+        response = jsonify(status='error', error='wrong hash')
+        response.status_code = 401
+        return response
+
+    return stream(name)
 
 
 @app.route('/x/<entry>/<path:name>')
@@ -67,24 +104,6 @@ def extract(entry, name):
         return response
     time = str(datetime.now().replace(microsecond=0) - start)
     return jsonify(time=time, file=entry, status='success')
-
-
-@app.route('/s/<path:name>')
-@requires_auth
-def stream(name):
-    return Response(file(localsettings.OUTDIR + name), direct_passthrough=True)
-
-
-@app.route('/hs/<hashcode>/<path:name>')
-def hash_stream(hashcode, name):
-    hashcode_i = get_file_hash(name)
-    print hashcode, hashcode_i
-    if hashcode != hashcode_i:
-        response = jsonify(status='error', error='wrong hash')
-        response.status_code = 401
-        return response
-
-    return Response(file(localsettings.OUTDIR + name), direct_passthrough=True)
 
 
 @app.route('/c/<path:name>')

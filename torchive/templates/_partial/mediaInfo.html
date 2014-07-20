@@ -4,7 +4,7 @@
             Title: {{ imdbinfo.title }} <br/>
             Year: {{ imdbinfo.year }} <br/>
             Rating: {{ imdbinfo.rating }} <br/>
-            Seasons: {{ imdbinfo.rating }} <br/>
+            Seasons: {{ imdbinfo.get_seasoncount() }} <br/>
         </td>
         <td>
             <img src="/imdbimg/{{ imdbinfo.image }}"/>
