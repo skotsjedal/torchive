@@ -229,5 +229,10 @@ def get_mediainfo(name):
 @requires_auth
 def get_image(image):
     image = os.path.join(CACHEFOLDER, image)
-    return send_file(image, mimetype='image/jpg')
+    if os.path.exists(image):
+        return send_file(image, mimetype='image/jpg')
+
+    response = jsonify(status='failed')
+    response.status_code = 404
+    return response
 
