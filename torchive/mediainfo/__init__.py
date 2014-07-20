@@ -10,6 +10,10 @@ if '__file__' in globals():
 
 
 class MediaInfo:
+    TV = u'TV'
+    MOVIE = u'Movie'
+    ANIME = u'Anime'
+
     def __init__(self):
         self.mtype = None
         self.grp = None
@@ -28,6 +32,7 @@ class MediaInfo:
 
 class ImdbInfo:
     def __init__(self):
+        self.id = None
         self.title = None
         self.imdbid = None
         self.seasons = {}
@@ -40,3 +45,6 @@ class ImdbInfo:
 
     def get_seasoncount(self):
         return len(self.seasons)
+
+    def __str__(self):
+        return str(self.__dict__)

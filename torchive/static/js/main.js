@@ -117,3 +117,20 @@ $(function() {
     });
 
 });
+
+
+$('.mediainfo').hover(function(event){
+    var file = $(this).attr('data-target');
+    var $mediainfo = $('#mediainfo');
+    $mediainfo.html('<div class="progress progress-indeterminate"><div class="win-ring"></div></div>').css({
+        top: event.pageY - 100 + "px",
+        left: event.pageX + 15 + "px"
+    }).show();
+    $mediainfo.load('/mi/' + encodeURIComponent(file), function (response, status, xhr) {
+        if (status == 'error') {
+            $('#mediainfo').html('error:<br/>' + response.error);
+        }
+    });
+    },function(){
+    $('#mediainfo').hide();
+});

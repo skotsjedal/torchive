@@ -1,17 +1,20 @@
 from datetime import datetime
+import os
 from shutil import copy2, rmtree
 from os import remove, rename, path, listdir
 
 from enzyme import MalformedMKVError
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, send_file
 from rarfile import RarFile
 from werkzeug.wrappers import Response
 
 from torchive import localsettings
 from torchive.auth import requires_auth
 from torchive.core.core import get_dirs, get_all, get_all_out, RARTEMP, get_file_hash
+from torchive.mediainfo import mediainfo
 from torchive.mediainfo.parser import parse
 from torchive.mkvinfo.mkvinfo import Mkvinfo
+from torchive.objectcacher import CACHEFOLDER
 from torchive.rar.rar import Rar
 
 
@@ -180,3 +183,26 @@ def get_track_info_html(name):
         response.status_code = 400
         return response
     return render_template('_partial/fileInfo.html', mkvinfo=mkvinfo.all)
+
+
+@app.route('/mi/<path:name>')
+@requires_auth
+def get_mediainfo(name):
+    try:
+        minfo = parse(name)
+        imdbinfo = mediainfo.find(minfo)
+    except Exception, e:
+        response = jsonify(status='failed', error=str(e))
+        response.status_code = 500
+        return response
+
+    print imdbinfo
+    return render_template('_partial/mediaInfo.html', imdbinfo=imdbinfo)
+
+
+@app.route('/imdbimg/<image>')
+@requires_auth
+def get_image(image):
+    image = os.path.join(CACHEFOLDER, image)
+    return send_file(image, mimetype='image/jpg')
+

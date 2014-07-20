@@ -1,10 +1,18 @@
 {% extends "layout.html" %}
 {% block body %}
-    <div id="fileInfo" style="position:absolute; z-index:1; margin-left: 148px"></div>
+    <div id="fileInfo" style="position:absolute; z-index:1; margin-left: 0px"></div>
+    <div id="mediainfo"
+         style="
+         display: none;
+         position: absolute;
+         z-index:1000;
+         background: white;
+         border: 2px solid black;
+         border-radius: 5px;"></div>
     <div class="row" id="down">
 
 
-        <div class="span10" style="position: relative; margin-left: 230px; z-index: 2; background-color: #ffffff;">
+        <div class="span10" style="position: relative; z-index: 2; background-color: #ffffff;">
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
@@ -18,7 +26,9 @@
                 {% for name, timestamp, size, code in entries %}
                     <tr>
                         <td>
-                            {{ loop.index }}. <a href="/hs/{{ code }}/{{ name }}">{{ name }}</a>
+                            {{ loop.index }}.
+                            <span class="mediainfo icon icon-info win-commandring btn-info" data-target="{{ name }}"></span>
+                            <a href="/hs/{{ code }}/{{ name }}">{{ name }}</a>
                         </td>
                         <td>
                             {{ timestamp }}

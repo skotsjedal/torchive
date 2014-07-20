@@ -5,7 +5,7 @@ __author__ = 'Skotsj'
 
 def tv(Title=None, Episode=None, Info=None, Source=None, Codec=None, Group=None, Filetype=None):
     m = MediaInfo()
-    m.mtype = u'TV'
+    m.mtype = MediaInfo.TV
     m.title = Title[1]
     m.season, m.ep = int(Episode[0]), int(Episode[1])
     if Info is not None:
@@ -20,7 +20,7 @@ def tv(Title=None, Episode=None, Info=None, Source=None, Codec=None, Group=None,
 
 def movie(Title=None, Year=None, Quality=None, Source=None, Codec=None, Group=None, Filetype=None):
     m = MediaInfo()
-    m.mtype = u'Movie'
+    m.mtype = MediaInfo.MOVIE
     m.title = Title[1]
     m.year = Year[0]
     m.quality = Quality[0] if Quality is not None else None
@@ -33,7 +33,7 @@ def movie(Title=None, Year=None, Quality=None, Source=None, Codec=None, Group=No
 
 def anime(Group=None, Title=None, Episode=None, Text=None, Filetype=None):
     m = MediaInfo()
-    m.mtype = u'Anime'
+    m.mtype = MediaInfo.ANIME
     m.title = Title[1]
     m.ep = Episode[1]
     m.info = Text[0] if Text is not None else None

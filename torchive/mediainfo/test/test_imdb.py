@@ -1,10 +1,10 @@
-from torchive.mediainfo.mediainfo import find
+from torchive.mediainfo.mediainfo import search_imdb
 
 __author__ = 'Skotsj'
 
 
 def test_search():
-    result = find('downton abbey')
+    result = search_imdb('downton abbey')
     assert result is not None
     print result
     assert result.imdbid == "tt1606375"
@@ -16,7 +16,7 @@ def test_search():
 
 
 def test_episodes():
-    result = find('downton abbey', with_episodes=True)
+    result = search_imdb('downton abbey', with_episodes=True)
     assert result is not None
     print result
     assert result.imdbid == "tt1606375"
@@ -26,7 +26,7 @@ def test_episodes():
 
 
 def test_episodes_for_movie():
-    result = find('x-men', with_episodes=True)
+    result = search_imdb('x-men', with_episodes=True)
     assert result is not None
     print result
     assert result.imdbid == "tt0120903"
