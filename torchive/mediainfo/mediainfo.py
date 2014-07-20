@@ -24,8 +24,9 @@ def find(mediainfo):
     """
 
     if mediainfo.mtype == MediaInfo.ANIME:
-        # TODO implement something
-        return None
+        imdbinfo = ImdbInfo()
+        imdbinfo.title = mediainfo.title
+        return imdbinfo
 
     lookup_id = mediainfo.title
     imdbinfo_persist = cacher.try_get(ImdbInfo.__name__, lookup_id)
