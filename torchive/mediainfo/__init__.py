@@ -24,3 +24,19 @@ class MediaInfo:
 
     def __str__(self):
         return str(self.__dict__)
+
+
+class ImdbInfo:
+    def __init__(self):
+        self.title = None
+        self.imdbid = None
+        self.seasons = {}
+        self.image = None
+        self.year = None
+        self.rating = None
+
+    def get_epcount(self, season):
+        return self.seasons[season]
+
+    def get_seasoncount(self):
+        return len(self.seasons)
