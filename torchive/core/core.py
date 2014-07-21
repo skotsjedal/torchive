@@ -24,7 +24,7 @@ def hashfolder(string):
 
 def get_file_hash(name):
     fsize = stat(torchive.localsettings.OUTDIR + name).st_size
-    hashbase = name + str(fsize) + torchive.localsettings.HASHSALT
+    hashbase = name.encode('utf-8') + str(fsize) + torchive.localsettings.HASHSALT
     return sha1(hashbase).hexdigest()[0:12]
 
 
