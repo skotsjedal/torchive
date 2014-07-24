@@ -213,7 +213,7 @@ def get_mediainfo(name):
         minfo = parse(name)
         imdbinfo = mediainfo.find(minfo)
     except Exception, e:
-        print "Exception:"
+        print "Exception:", e
         print '-'*60
         traceback.print_exc(file=sys.stdout)
         print '-'*60
