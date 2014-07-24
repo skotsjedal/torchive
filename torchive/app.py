@@ -13,7 +13,7 @@ from werkzeug.wrappers import Response
 from torchive import localsettings
 from torchive.auth import requires_auth
 from torchive.core.core import get_dirs, get_all, get_all_out, RARTEMP, get_file_hash
-from torchive.mediainfo import mediainfo
+from torchive.mediainfo import mediainfo, MediaInfo
 from torchive.mediainfo.mediainfo import find_seen_eps
 from torchive.mediainfo.parser import parse
 from torchive.mkvinfo.mkvinfo import Mkvinfo
@@ -213,9 +213,15 @@ def get_mediainfo(name):
     try:
         minfo = parse(name)
         imdbinfo = mediainfo.find(minfo)
-        eps = [e.ep for e in find_seen_eps(imdbinfo, minfo)]
-        pre_eps = range(1, minfo.ep)
-        missing_eps = [str(ep) for ep in pre_eps if ep not in eps]
+
+        # If it's a tv show, see which episodes of
+        # current season missing from seen directory
+        if minfo.mtype == MediaInfo.TV:
+            eps = [e.ep for e in find_seen_eps(imdbinfo, minfo)]
+            pre_eps = range(1, minfo.ep)
+            missing_eps = [str(ep) for ep in pre_eps if ep not in eps]
+        else:
+            missing_eps = []
     except Exception, e:
         print "Exception:", e
         print '-' * 60
