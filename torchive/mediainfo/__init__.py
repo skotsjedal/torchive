@@ -18,7 +18,7 @@ class MediaInfo:
         self.mtype = None
         self.grp = None
         self.title = None
-        self.season = None
+        self.season = 1
         self.ep = None
         self.info = None
         self.quality = None

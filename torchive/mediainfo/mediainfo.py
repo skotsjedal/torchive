@@ -1,11 +1,12 @@
 import os
 import shutil
+
 from torchive.mediainfo import ImdbInfo, MediaInfo
 from torchive.objectcacher import cacher, CACHEFOLDER
 
-__author__ = 'Skotsj'
 from imdb import IMDb
-import json, requests
+import json
+import requests
 
 """
 I use omdbapi as imdbpy search function doesn't work
@@ -24,6 +25,7 @@ def find(mediainfo):
     """
 
     if mediainfo.mtype == MediaInfo.ANIME:
+        print 'no api for anime implemented, not fetching for %s' % mediainfo.title
         imdbinfo = ImdbInfo()
         imdbinfo.title = mediainfo.title
         return imdbinfo
@@ -38,6 +40,7 @@ def find(mediainfo):
         imdbinfo.id = mediainfo.title
         cacher.persist(imdbinfo)
     else:
+        print 'using cached entry for %s' % mediainfo.title
         imdbinfo = imdbinfo_persist.obj
 
     return imdbinfo
@@ -62,7 +65,7 @@ def search_imdb(movie, with_episodes=False):
     :param with_episodes:
     :return:
     """
-    # print 'searching for %s, with episodes:%s' % (movie, with_episodes)
+    print 'searching omdbapi for %s, with episodes:%s' % (movie, with_episodes)
     resp = requests.get(OMDBAPI_ENDP, params=dict(t=movie))
     respdict = json.loads(resp.text)
     del resp
@@ -94,6 +97,6 @@ def get_seasons(show_id):
     """
     if show_id.startswith('tt'):
         show_id = show_id[2:]
-    # print 'searching for episodes of %s' % show_id
+    print 'searching for episodes of %s in imdb' % show_id
     return ia.get_movie_episodes(show_id)['data']['episodes']
 
