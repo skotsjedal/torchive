@@ -25,6 +25,7 @@ class MediaInfo:
         self.source = None
         self.year = None
         self.ft = None
+        self.imdbinfo = None
 
     def __str__(self):
         return str(self.__dict__)

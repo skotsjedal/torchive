@@ -5,6 +5,9 @@
             {% if minfo.mtype == 'TV' %}
                 Season: {{ minfo.season }}/{{ imdbinfo.get_seasoncount() }} <br/>
                 Episode: {{ minfo.ep }}/{{ imdbinfo.seasons[minfo.season] }} <br/>
+                {% if missing_eps|length > 0 %}
+                    Missing: <span style="color: #bc1c48">{{ ' '.join(missing_eps) }}</span> <br/>
+                {% endif %}
             {% endif %}
             Year: {{ imdbinfo.year }} <br/>
             Rating: {{ imdbinfo.rating }} <br/>

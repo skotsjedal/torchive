@@ -8,7 +8,7 @@ if '__file__' in globals():
         PATH += '/'
 
 CACHEFOLDER = PATH + 'cache'
-EXPIRE_THRESHOLD = timedelta(hours=48)
+EXPIRE_THRESHOLD = timedelta(days=7)
 
 if not os.path.exists(CACHEFOLDER):
     os.mkdir(CACHEFOLDER)

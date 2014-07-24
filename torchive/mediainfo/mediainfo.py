@@ -1,7 +1,9 @@
 import os
 import shutil
+from torchive import localsettings
 
 from torchive.mediainfo import ImdbInfo, MediaInfo
+from torchive.mediainfo import parser
 from torchive.objectcacher import cacher, CACHEFOLDER
 
 from imdb import IMDb
@@ -25,7 +27,7 @@ def find(mediainfo):
     """
 
     if mediainfo.mtype == MediaInfo.ANIME:
-        print 'no api for anime implemented, not fetching for %s' % mediainfo.title
+        # print 'no api for anime implemented, not fetching for %s' % mediainfo.title
         imdbinfo = ImdbInfo()
         imdbinfo.title = mediainfo.title
         return imdbinfo
@@ -34,21 +36,20 @@ def find(mediainfo):
     imdbinfo_persist = cacher.try_get(ImdbInfo.__name__, lookup_id)
     if imdbinfo_persist is None or imdbinfo_persist.expired:
         imdbinfo = search_imdb(mediainfo.title, with_episodes=mediainfo.mtype == MediaInfo.TV)
-        if imdbinfo is None:
-            imdbinfo = ImdbInfo()
-            imdbinfo.title = 'Not found'
         imdbinfo.id = mediainfo.title
         cacher.persist(imdbinfo)
     else:
-        print 'using cached entry for %s' % mediainfo.title
+        # print 'using cached entry for %s' % mediainfo.title
         imdbinfo = imdbinfo_persist.obj
 
     return imdbinfo
 
 
 def get_imdb_image(url):
+    if url == 'N/A':
+        return None
     response = requests.get(url, stream=True)
-    imagename = url[url.rindex('/')+1:]
+    imagename = url[url.rindex('/') + 1:]
     fullpathimage = os.path.join(CACHEFOLDER, imagename)
     with open(fullpathimage, 'wb') as out_file:
         shutil.copyfileobj(response.raw, out_file)
@@ -69,8 +70,12 @@ def search_imdb(movie, with_episodes=False):
     resp = requests.get(OMDBAPI_ENDP, params=dict(t=movie))
     respdict = json.loads(resp.text)
     del resp
+
     if respdict['Response'] == u'False':
-        return None
+        info = ImdbInfo()
+        info.title = 'Not found'
+        return info
+
     info = ImdbInfo()
     info.title = respdict['Title']
     info.imdbid = respdict['imdbID']
@@ -97,6 +102,35 @@ def get_seasons(show_id):
     """
     if show_id.startswith('tt'):
         show_id = show_id[2:]
-    print 'searching for episodes of %s in imdb' % show_id
     return ia.get_movie_episodes(show_id)['data']['episodes']
 
+
+def episode_comparator(x, y):
+    if x.season != y.season:
+        return x.season - y.season
+    return x.ep - y.ep
+
+
+def find_seen_eps(imdbinfo_query, minfo_query):
+    """
+
+    Very slow and unoptimized
+    TODO fix with some sort of caching
+
+    :param imdbinfo_query:
+    :param minfo_query:
+    :return:
+    """
+    eps = []
+    for name in os.listdir(localsettings.DONEDIR):
+        try:
+            minfo = parser.parse(name)
+            imdbinfo = find(minfo)
+            if imdbinfo.imdbid == imdbinfo_query.imdbid and minfo.season == minfo_query.season:
+                eps.append(minfo)
+        except Exception, ex:
+            if not ex.message.startswith('Cannot parse'):
+                raise
+
+    eps = sorted(eps, key=lambda x: x.ep)
+    return eps

@@ -14,6 +14,7 @@ from torchive import localsettings
 from torchive.auth import requires_auth
 from torchive.core.core import get_dirs, get_all, get_all_out, RARTEMP, get_file_hash
 from torchive.mediainfo import mediainfo
+from torchive.mediainfo.mediainfo import find_seen_eps
 from torchive.mediainfo.parser import parse
 from torchive.mkvinfo.mkvinfo import Mkvinfo
 from torchive.objectcacher import CACHEFOLDER
@@ -212,17 +213,20 @@ def get_mediainfo(name):
     try:
         minfo = parse(name)
         imdbinfo = mediainfo.find(minfo)
+        eps = [e.ep for e in find_seen_eps(imdbinfo, minfo)]
+        pre_eps = range(1, minfo.ep)
+        missing_eps = [str(ep) for ep in pre_eps if ep not in eps]
     except Exception, e:
         print "Exception:", e
-        print '-'*60
+        print '-' * 60
         traceback.print_exc(file=sys.stdout)
-        print '-'*60
+        print '-' * 60
         response = jsonify(status='failed', error=str(e))
         response.status_code = 500
         return response
 
     print imdbinfo
-    return render_template('_partial/mediaInfo.html', minfo=minfo, imdbinfo=imdbinfo)
+    return render_template('_partial/mediaInfo.html', minfo=minfo, imdbinfo=imdbinfo, missing_eps=missing_eps)
 
 
 @app.route('/imdbimg/<image>')
@@ -235,6 +239,7 @@ def get_image(image):
     response = jsonify(status='failed')
     response.status_code = 404
     return response
+
 
 @app.route('/imdburl/<path:name>')
 @requires_auth
