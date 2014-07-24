@@ -1,18 +1,20 @@
+Info:
+  Order: 0
+  Pattern: <Text>? <Quality>
+
+SimpleTV:
+  Order: 1
+  Pattern: <Title> \. <Episode> <Text> <Filetype>
+
 TV:
-  Order: 1 
-  Pattern:  |
-    <Title> \. <Episode> \. <Info>? <Source> \. <Codec> - <Group> \. <Filetype>
+  Order: 2
+  Pattern: <Title> \. <Episode> \. <Info>? <Source> \. <Codec> - <Group> \. <Filetype>
 
 Movie:
-  Order: 2
-  Pattern: |
-    <Title> \. <Year> \. <Quality> <Source> \. <Codec> (?:- <Group>)? \. <Filetype>
+  Order: 3
+  Pattern: <Title> \. <Year> \. <Quality> <Source> \. <Codec> (?:- <Group>)? \. <Filetype>
 
 Anime:
-  Order: 3
-  Pattern: |
-    \[<Group>\] \. <Title> \. -? \.? <Episode> \. <Text>? .* \[.+\] \. <Filetype>
+  Order: 4
+  Pattern: \[<Group>\] \. <Title> \. -? \.? <Episode> \. <Text>? .* \[.+\] \. <Filetype>
 
-Info:
-  Pattern: |
-    <Text>? <Quality>

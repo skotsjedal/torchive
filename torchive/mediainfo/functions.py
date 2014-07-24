@@ -18,11 +18,22 @@ def tv(Title=None, Episode=None, Info=None, Source=None, Codec=None, Group=None,
     return m
 
 
+def simple_tv(Title=None, Episode=None, Text=None, Filetype=None):
+    m = MediaInfo()
+    m.mtype = MediaInfo.TV
+    m.title = Title[1]
+    m.season = int(Episode[0]) if Episode[0] != '' else 0
+    m.ep = int(Episode[1])
+    m.info = Text[0] if Text is not None else None
+    m.ft = Filetype[0]
+    return m
+
+
 def movie(Title=None, Year=None, Quality=None, Source=None, Codec=None, Group=None, Filetype=None):
     m = MediaInfo()
     m.mtype = MediaInfo.MOVIE
     m.title = Title[1]
-    m.year = Year[0]
+    m.year = int(Year[0])
     m.quality = Quality[0] if Quality is not None else None
     m.source = Source[0]
     m.codec = Codec[0]
@@ -35,13 +46,14 @@ def anime(Group=None, Title=None, Episode=None, Text=None, Filetype=None):
     m = MediaInfo()
     m.mtype = MediaInfo.ANIME
     m.title = Title[1]
-    m.ep = Episode[1]
+    m.ep = int(Episode[1])
     m.info = Text[0] if Text is not None else None
     m.grp = Group[0]
     m.ft = Filetype[0]
     return m
 
 functions = {
+    'SimpleTV': simple_tv,
     'TV': tv,
     'Movie': movie,
     'Anime': anime
