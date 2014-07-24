@@ -46,6 +46,7 @@ def try_get(objtype, idx):
     #print 'loading object %s' % filename
     with open(filename, 'rb') as persist_file:
         persisted = pickle.load(persist_file)
-        if (datetime.now() - persisted.time).seconds > EXPIRE_THRESHOLD:
+        age = datetime.now() - persisted.time
+        if age > EXPIRE_THRESHOLD:
             persisted.expired = True
         return persisted
