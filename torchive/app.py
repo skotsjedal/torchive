@@ -79,7 +79,7 @@ def protected_stream(name):
 @app.route('/hs/<hashcode>/<path:name>')
 def hash_stream(hashcode, name):
     hashcode_i = get_file_hash(name)
-    print hashcode, hashcode_i
+    print(hashcode, hashcode_i)
     if hashcode != hashcode_i:
         response = jsonify(status='error', error='wrong hash')
         response.status_code = 401
@@ -98,10 +98,10 @@ def extract(entry, name):
         if entry[-4:] == ".rar":
             extdir = localsettings.BASEDIR + RARTEMP
         rfile.extract(entry, path=extdir)
-        print name, "extracted"
-    except:
+        print(name, "extracted")
+    except Exception:
         status = 'failed'
-        print name, "failed extract"
+        print(name, "failed extract")
         response = jsonify(status=status)
         response.status_code = 400
         return response
@@ -122,13 +122,13 @@ def copy(name):
                 fullpath_f = path.join(fullpath, ff)
                 target_f = path.join(localsettings.OUTDIR, ff)
                 copy2(fullpath_f, target_f)
-                print ff, "copied"
+                print(ff, "copied")
         else:
             copy2(fullpath, target)
-            print name, "copied"
-    except Exception, e:
+            print(name, "copied")
+    except Exception as e:
         status = 'failed'
-        print name, "failed copy"
+        print(name, "failed copy")
         response = jsonify(status=status, error=str(e))
         response.status_code = 400
         return response
@@ -144,12 +144,12 @@ def move(name):
     start = datetime.now().replace(microsecond=0)
     try:
         rename(fullpath, target)
-        print name, "moved"
-    except Exception, e:
+        print(name, "moved")
+    except Exception as e:
         status = 'failed'
         response = jsonify(status, error=str(e))
         response.status_code = 400
-        print name, "move failed"
+        print(name, "move failed")
         return response
     time = str(datetime.now().replace(microsecond=0) - start)
     return jsonify(time=time, file=name, status='success')
@@ -162,15 +162,15 @@ def delete(name):
     try:
         if path.isdir(fullpath):
             rmtree(fullpath)
-            print name, "deleted dir"
+            print(name, "deleted dir")
         else:
             remove(fullpath)
-            print name, "deleted single file"
-    except OSError, e:
+            print(name, "deleted single file")
+    except OSError as e:
         status = 'failed'
         response = jsonify(status=status, error=str(e))
         response.status_code = 400
-        print name, "delete failed"
+        print(name, "delete failed")
         return response
     return jsonify(status='success')
 
@@ -182,7 +182,7 @@ def get_track_info(name):
     status = 'success'
     try:
         mkvinfo = Mkvinfo(fullpath)
-    except MalformedMKVError, e:
+    except MalformedMKVError as e:
         status = 'error'
         mkvinfo = e
     try:
@@ -196,11 +196,11 @@ def get_track_info(name):
 @app.route('/ih/<path:name>')
 @requires_auth
 def get_track_info_html(name):
-    print name
+    print(name)
     fullpath = path.join(localsettings.OUTDIR, name)
     try:
         mkvinfo = Mkvinfo(fullpath)
-    except MalformedMKVError, e:
+    except MalformedMKVError as e:
         response = jsonify(status='failed', error=str(e))
         response.status_code = 400
         return response
@@ -218,20 +218,20 @@ def get_mediainfo(name):
         # current season missing from seen directory
         if minfo.mtype == MediaInfo.TV:
             eps = [e.ep for e in find_seen_eps(imdbinfo, minfo)]
-            pre_eps = range(1, minfo.ep)
+            pre_eps = list(range(1, minfo.ep))
             missing_eps = [str(ep) for ep in pre_eps if ep not in eps]
         else:
             missing_eps = []
-    except Exception, e:
-        print "Exception:", e
-        print '-' * 60
+    except Exception as e:
+        print("Exception:", e)
+        print('-' * 60)
         traceback.print_exc(file=sys.stdout)
-        print '-' * 60
+        print('-' * 60)
         response = jsonify(status='failed', error=str(e))
         response.status_code = 500
         return response
 
-    print imdbinfo
+    print(imdbinfo)
     return render_template('_partial/mediaInfo.html', minfo=minfo, imdbinfo=imdbinfo, missing_eps=missing_eps)
 
 
@@ -253,7 +253,7 @@ def get_imdb_url(name):
     try:
         minfo = parse(name)
         imdbinfo = mediainfo.find(minfo)
-    except Exception, e:
+    except Exception as e:
         response = jsonify(status='failed', error=str(e))
         response.status_code = 500
         return response

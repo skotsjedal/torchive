@@ -10,7 +10,7 @@ class Rar:
         self.parse_folder(self.folder)
 
     def parse_folder(self, folder):
-        print "folderparse", folder
+        print("folderparse", folder)
         for fil in os.listdir(folder):
             fullpath = os.path.join(folder, fil)
             if fil[-4:] == ".rar":

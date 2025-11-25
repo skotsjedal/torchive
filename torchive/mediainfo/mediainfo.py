@@ -1,14 +1,13 @@
+import json
 import os
 import shutil
-from torchive import localsettings
-
-from torchive.mediainfo import ImdbInfo, MediaInfo
-from torchive.mediainfo import parser
-from torchive.objectcacher import cacher, CACHEFOLDER
 
 from imdb import IMDb
-import json
 import requests
+
+from torchive import localsettings
+from torchive.mediainfo import MediaInfo, ImdbInfo, parser
+from torchive.objectcacher import cacher, CACHEFOLDER
 
 """
 I use omdbapi as imdbpy search function doesn't work
@@ -66,12 +65,12 @@ def search_imdb(movie, with_episodes=False):
     :param with_episodes:
     :return:
     """
-    print 'searching omdbapi for %s, with episodes:%s' % (movie, with_episodes)
+    print('searching omdbapi for %s, with episodes:%s' % (movie, with_episodes))
     resp = requests.get(OMDBAPI_ENDP, params=dict(t=movie))
     respdict = json.loads(resp.text)
     del resp
 
-    if respdict['Response'] == u'False':
+    if respdict['Response'] == 'False':
         info = ImdbInfo()
         info.title = 'Not found'
         return info
@@ -87,7 +86,7 @@ def search_imdb(movie, with_episodes=False):
         return info
 
     seasoninfo = get_seasons(info.imdbid)
-    for season, seasondata in seasoninfo.iteritems():
+    for season, seasondata in seasoninfo.items():
         info.seasons[season] = len(seasondata)
 
     return info
@@ -128,8 +127,8 @@ def find_seen_eps(imdbinfo_query, minfo_query):
             imdbinfo = find(minfo)
             if imdbinfo.imdbid == imdbinfo_query.imdbid and minfo.season == minfo_query.season:
                 eps.append(minfo)
-        except Exception, ex:
-            if not ex.message.startswith('Cannot parse'):
+        except Exception as ex:
+            if not str(ex).startswith('Cannot parse'):
                 raise
 
     eps = sorted(eps, key=lambda x: x.ep)

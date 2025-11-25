@@ -13,7 +13,7 @@ parser = reparse.parser(
 
 
 def parse(filename):
-    filename = filename.encode('utf-8').replace('_', ' ').replace(' ', '.')
+    filename = str(filename).replace('_', ' ').replace(' ', '.')
     try:
         p = parser(filename)
         m = p[0][0]

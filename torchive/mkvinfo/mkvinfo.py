@@ -4,7 +4,7 @@ from torchive.mkvinfo.models import SubTrack, VideoTrack, AudioTrack
 
 class Mkvinfo:
     def __init__(self, filename):
-        with open(filename) as f:
+        with open(filename, 'rb') as f:
             self.mkv = MKV(f)
             self.title = self.mkv.info.title
             self.duration = self.mkv.info.duration

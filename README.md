@@ -16,6 +16,7 @@ Install:
 copy localsettings.py.bak to localsettings.py and edit
 
 Dependencies:
+* Python 3.11+
 * flask
 * enzyme
 * rarfile
