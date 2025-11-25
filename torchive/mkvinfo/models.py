@@ -1,11 +1,10 @@
 from abc import ABCMeta, abstractmethod
 
 
-class Track(object):
+class Track(object, metaclass=ABCMeta):
     """
         Abstract superclass for other tracktypes
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, track):

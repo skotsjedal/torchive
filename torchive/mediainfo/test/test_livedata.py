@@ -1,7 +1,6 @@
-from torchive.mediainfo.parser import parse
-
 import os
 from torchive import localsettings
+from torchive.mediainfo.parser import parse
 
 
 def ignore_test_livedata():
@@ -12,5 +11,5 @@ def ignore_test_livedata():
     :return:
     """
     for f in os.listdir(localsettings.OUTDIR):
-        print parse(f)
+        print(parse(f))
 

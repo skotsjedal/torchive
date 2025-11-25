@@ -13,18 +13,18 @@ def hashfolder(string):
     folders = string.split('/')
     partial = ''
     for f in folders:
-        partial += '/' + f.encode('utf-8')
-        h = sha1(partial)
+        partial += '/' + f
+        h = sha1(partial.encode('utf-8'))
         hexd = h.hexdigest()[0:12]
         digests.append(hexd)
     fullhex = ' '.join(digests)
-    print string, fullhex
+    print(string, fullhex)
     return fullhex
 
 
 def get_file_hash(name):
     fsize = stat(torchive.localsettings.OUTDIR + name).st_size
-    hashbase = name.encode('utf-8') + str(fsize) + torchive.localsettings.HASHSALT
+    hashbase = (name + str(fsize) + torchive.localsettings.HASHSALT).encode('utf-8')
     return sha1(hashbase).hexdigest()[0:12]
 
 
@@ -63,8 +63,8 @@ def human_readable(num):
 
 def get_all(depth=0, folder=torchive.localsettings.BASEDIR):
     entries = []
-    if isinstance(folder, str):
-        folder = unicode(folder, 'UTF-8')
+    if isinstance(folder, bytes):
+        folder = folder.decode('utf-8')
     for f in listdir(folder):
         foldername = folder[folder.rindex('/') + 1:]
         if not RARTEMP == foldername and RARFILE.match(f):
@@ -94,11 +94,11 @@ def get_all_out():
 
 
 def clear_rar_dir(folder):
-    print "Attempt delete dir", folder
+    print("Attempt delete dir", folder)
     for f in listdir(folder):
         if RARFILE.match(f):
             remove(path.join(folder, f))
-            print "deleted", f
+            print("deleted", f)
         else:
-            print "not rar, will not delete", f
+            print("not rar, will not delete", f)
     rmdir(folder)

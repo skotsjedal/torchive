@@ -17,9 +17,9 @@ class Arch:
         self.name = loc[loc.rindex("/") + 1:]
         try:
             self.arch = RarFile(loc)
-            print "archparsed", self.name
+            print("archparsed", self.name)
         except NeedFirstVolume:
-            print "notfirstvolume, skipping", self.name
+            print("notfirstvolume, skipping", self.name)
             return
 
         for f in self.arch.infolist():
@@ -31,7 +31,7 @@ class ContainedFile:
     extracted = False
 
     def __init__(self, f):
-        print "init", f.filename
+        print("init", f.filename)
         self.name = f.filename
         self.extracted = self.name in get_extracted() or (self.name[-4:] == ".rar" and self.name in get_inner_archs())
         self.seen = self.name in get_done()
